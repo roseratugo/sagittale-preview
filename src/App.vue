@@ -20,11 +20,13 @@
       <button :class="{ red: true, active: activeCarpe === '-14.14' }" @click="rotateElement('ant-A', '-14.14', '#d03431', '2pt')">-2</button>
       
       <h2>Boulet</h2>
+      <button :class="{ red: true, active: activeBoulet === '36' }" @click="rotateElement('ant-B', '36', '#d03431', '2pt')">3</button>
       <button :class="{ red: true, active: activeBoulet === '12' }" @click="rotateElement('ant-B', '12', '#d03431', '2pt')">2</button>
       <button :class="{ orange: true, active: activeBoulet === '7.5' }" @click="rotateElement('ant-B', '7.5', '#ea9c2b', '2pt')">1</button>
       <button :class="{ green: true, active: activeBoulet === '0' }" @click="rotateElement('ant-B', '0', '#5cb85c', '2pt')">0</button>
       <button :class="{ orange: true, active: activeBoulet === '-7.5' }" @click="rotateElement('ant-B', '-7.5', '#ea9c2b', '2pt')">-1</button>
       <button :class="{ red: true, active: activeBoulet === '-12' }" @click="rotateElement('ant-B', '-12', '#d03431', '2pt')">-2</button>
+      <button :class="{ red: true, active: activeBoulet === '-36' }" @click="rotateElement('ant-B', '-36', '#d03431', '2pt')">-3</button>
       
       <h2>Pieds</h2>
       <button :class="{ red: true, active: activePieds === '12' }" @click="rotateElement('ant-C', '12', '#d03431', '2pt')">2</button>
@@ -59,7 +61,12 @@ export default {
       activeJarret: null,
       activeCarpe: null,
       activeBoulet: null,
-      activePieds: null
+      activePieds: null,
+      angleJarret: 0,
+      angleCarpe: 0,
+      angleBoulet: 0,
+      anglePieds: 0,
+      totalAngle: 0,
     };
   },
   methods: {
@@ -108,6 +115,14 @@ export default {
           console.log(`Dev introuvable pour ${elementId}`);
         }
 
+        const devTop = svgDocument.getElementById(elementId + '-dev-top');
+        if (devTop) {
+          devTop.style.stroke = strokeColor;
+          devTop.style.strokeWidth = strokeWidth;
+        } else {
+          console.log(`Dev-Top introuvable pour ${elementId}`);
+        }
+
         // Mise à jour des rotations et vérification des conditions
         if (elementId === 'ant-Z') {
           this.rotationZ = parseFloat(angle);
@@ -122,6 +137,35 @@ export default {
         this.checkRotations();
       } else {
         console.log(`Élément principal introuvable pour ${elementId}`);
+      }
+      if (elementId.includes('ant-Z')) {
+        this.angleJarret = parseFloat(angle);
+      } else if (elementId.includes('ant-A')) {
+        this.angleCarpe = parseFloat(angle);
+      } else if (elementId.includes('ant-B')) {
+        this.angleBoulet = parseFloat(angle);
+      } else if (elementId.includes('ant-C')) {
+        this.anglePieds = parseFloat(angle);
+      }
+
+      // Recalcul de totalAngle
+      this.totalAngle = this.angleJarret + this.angleCarpe + this.angleBoulet + this.anglePieds;
+
+      // Application de la rotation à ant-mask-foot
+      this.applyRotationToMaskFoot();
+    },
+
+    applyRotationToMaskFoot() {
+      const svgDocument = this.$refs.svgElement.contentDocument;
+      const maskFoot = svgDocument.getElementById('ant-mask-foot');
+      const pivot = svgDocument.getElementById('ant-C-join');
+
+      if (maskFoot && pivot) {
+        const inverseAngle = -this.totalAngle;
+        const cx = pivot.cx.baseVal.value;
+        const cy = pivot.cy.baseVal.value;
+
+        maskFoot.setAttribute('transform', `rotate(${inverseAngle}, ${cx}, ${cy})`);
       }
     },
     checkRotations() {
