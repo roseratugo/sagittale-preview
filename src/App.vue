@@ -4,7 +4,7 @@
   <div class="container">
     <object type="image/svg+xml" data="/sagittale-ant.svg" ref="svgElement"></object>
     <div class="side">
-      <h2>)Épaule</h2>
+      <h2>Épaule</h2>
       <button :class="{ red: true, active: activeJarret === '5.8' }" @click="rotateElement('ant-Z', '5.8', '#d03431', '2pt')">2</button>
       <button :class="{ orange: true, active: activeJarret === '3.5' }" @click="rotateElement('ant-Z', '3.5', '#ea9c2b', '2pt')">1</button>
       <button :class="{ green: true, active: activeJarret === '0' }" @click="rotateElement('ant-Z', '0', '#5cb85c', '2pt')">0</button>
