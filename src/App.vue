@@ -11,12 +11,10 @@
             <!-- Add other options here -->
           </select>
         </div>
-        <h2>Épaule</h2>
-        <input type="range" min="-5.8" max="5.8" step="0.1" v-model="angleJarret" @input="handleSliderChange('ant-Z', angleJarret)">
         <h2>Carpe</h2>
-        <input type="range" min="-14.14" max="14.14" step="0.1" v-model="angleCarpe" @input="handleSliderChange('ant-A', angleCarpe)">
+        <input type="range" min="-14.14" max="14.14" step="0.1" v-model="angleCarpe" @input="handleCarpeSliderChange">
         <h2>Boulet</h2>
-        <input type="range" min="-36" max="36" step="0.1" v-model="angleBoulet" @input="handleSliderChange('ant-B', angleBoulet)">
+        <input type="range" min="-36" max="36" step="0.1" v-model="angleBoulet" @input="handleBouletSliderChange">
         <h2>Pied</h2>
         <input type="range" min="-12" max="12" step="0.1" v-model="anglePieds" @input="handleSliderChange('ant-C', anglePieds)">
 
@@ -74,6 +72,39 @@ export default {
       const strokeColor = this.determineStrokeColor(angle);
       const strokeWidth = '2pt'; // Adjust as needed
       this.rotateElement(elementId, angle, strokeColor, strokeWidth);
+    },
+    handleCarpeSliderChange() {
+      // Adjust the shoulder (Jarret) based on Carpe angle
+      // Jarret reaches its max angle of 5.8 when Carpe is at -14.14
+      this.angleJarret = 5.8 * (this.angleCarpe / -14.14);
+
+      // Ensuring Jarret does not exceed its maximum range
+      if (this.angleJarret > 5.8) {
+        this.angleJarret = 5.8;
+      }
+      if (this.angleJarret < -5.8) {
+        this.angleJarret = -5.8;
+      }
+
+      this.handleSliderChange('ant-Z', this.angleJarret);
+      this.handleSliderChange('ant-A', this.angleCarpe);
+    },
+
+    handleBouletSliderChange() {
+      // Adjust the Carpe based on Boulet angle
+      // Carpe reaches its max angle of -14.14 when Boulet is at -36
+      this.angleCarpe = -14.14 * (this.angleBoulet / -36);
+
+      // Ensuring Carpe does not exceed its maximum range
+      if (this.angleCarpe > 14.14) {
+        this.angleCarpe = 14.14;
+      }
+      if (this.angleCarpe < -14.14) {
+        this.angleCarpe = -14.14;
+      }
+
+      this.handleSliderChange('ant-A', this.angleCarpe); // Adjust Carpe only
+      this.handleSliderChange('ant-B', this.angleBoulet); // Continue to adjust Boulet
     },
     determineStrokeColor(angle) {
       if (angle >= 5 || angle <= -5) {
