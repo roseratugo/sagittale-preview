@@ -1,61 +1,52 @@
 <template>
   <div id="app">
-  <h1>Sagittale PREVIEW</h1>
-  <div class="container">
-    <object type="image/svg+xml" data="/sagittale-ant.svg" ref="svgElement"></object>
-    <div class="side">
-      <h2>Épaule</h2>
-      <button :class="{ red: true, active: activeJarret === '5.8' }" @click="rotateElement('ant-Z', '5.8', '#d03431', '2pt')">2</button>
-      <button :class="{ orange: true, active: activeJarret === '3.5' }" @click="rotateElement('ant-Z', '3.5', '#ea9c2b', '2pt')">1</button>
-      <button :class="{ green: true, active: activeJarret === '0' }" @click="rotateElement('ant-Z', '0', '#5cb85c', '2pt')">0</button>
-      <button :class="{ orange: true, active: activeJarret === '-3.5' }" @click="rotateElement('ant-Z', '-3.5', '#ea9c2b', '2pt')">-1</button>
-      <button :class="{ red: true, active: activeJarret === '-5.8' }" @click="rotateElement('ant-Z', '-5.8', '#d03431', '2pt')">-2</button>
-      
-      
-      <h2>Carpe</h2>
-      <button :class="{ red: true, active: activeCarpe === '14.14' }" @click="rotateElement('ant-A', '14.14', '#d03431', '2pt')">2</button>
-      <button :class="{ orange: true, active: activeCarpe === '5' }" @click="rotateElement('ant-A', '5', '#ea9c2b', '2pt')">1</button>
-      <button :class="{ green: true, active: activeCarpe === '0' }" @click="rotateElement('ant-A', '0', '#5cb85c', '2pt')">0</button>
-      <button :class="{ orange: true, active: activeCarpe === '-5' }" @click="rotateElement('ant-A', '-5', '#ea9c2b', '2pt')">-1</button>
-      <button :class="{ red: true, active: activeCarpe === '-14.14' }" @click="rotateElement('ant-A', '-14.14', '#d03431', '2pt')">-2</button>
-      
-      <h2>Boulet</h2>
-      <button :class="{ red: true, active: activeBoulet === '36' }" @click="rotateElement('ant-B', '36', '#d03431', '2pt')">3</button>
-      <button :class="{ red: true, active: activeBoulet === '12' }" @click="rotateElement('ant-B', '12', '#d03431', '2pt')">2</button>
-      <button :class="{ orange: true, active: activeBoulet === '7.5' }" @click="rotateElement('ant-B', '7.5', '#ea9c2b', '2pt')">1</button>
-      <button :class="{ green: true, active: activeBoulet === '0' }" @click="rotateElement('ant-B', '0', '#5cb85c', '2pt')">0</button>
-      <button :class="{ orange: true, active: activeBoulet === '-7.5' }" @click="rotateElement('ant-B', '-7.5', '#ea9c2b', '2pt')">-1</button>
-      <button :class="{ red: true, active: activeBoulet === '-12' }" @click="rotateElement('ant-B', '-12', '#d03431', '2pt')">-2</button>
-      <button :class="{ red: true, active: activeBoulet === '-36' }" @click="rotateElement('ant-B', '-36', '#d03431', '2pt')">-3</button>
-      
-      <h2>Pieds</h2>
-      <button :class="{ red: true, active: activePieds === '12' }" @click="rotateElement('ant-C', '12', '#d03431', '2pt')">2</button>
-      <button :class="{ orange: true, active: activePieds === '7.5' }" @click="rotateElement('ant-C', '7.5', '#ea9c2b', '2pt')">1</button>
-      <button :class="{ green: true, active: activePieds === '0' }" @click="rotateElement('ant-C', '0', '#5cb85c', '2pt')">0</button>
-      <button :class="{ orange: true, active: activePieds === '-7.5' }" @click="rotateElement('ant-C', '-7.5', '#ea9c2b', '2pt')">-1</button>
-      <button :class="{ red: true, active: activePieds === '-12' }" @click="rotateElement('ant-C', '-12', '#d03431', '2pt')">-2</button>
+    <h1>Sagittale PREVIEW</h1>
+    <div class="container">
+      <object type="image/svg+xml" :data="currentSvg" ref="svgElement"></object>
+      <div class="side">
+        <div class="search-box">
+          <select v-model="selectedSvg" @change="updateSvg">
+            <option disabled value="">Pathologie</option>
+            <option value="hyperlaxityLevel3">Hyperlaxité de niveau 3</option>
+            <!-- Add other options here -->
+          </select>
+        </div>
+        <h2>Épaule</h2>
+        <input type="range" min="-5.8" max="5.8" step="0.1" v-model="angleJarret" @input="handleSliderChange('ant-Z', angleJarret)">
+        <h2>Carpe</h2>
+        <input type="range" min="-14.14" max="14.14" step="0.1" v-model="angleCarpe" @input="handleSliderChange('ant-A', angleCarpe)">
+        <h2>Boulet</h2>
+        <input type="range" min="-36" max="36" step="0.1" v-model="angleBoulet" @input="handleSliderChange('ant-B', angleBoulet)">
+        <h2>Pied</h2>
+        <input type="range" min="-12" max="12" step="0.1" v-model="anglePieds" @input="handleSliderChange('ant-C', anglePieds)">
+
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.container{display: flex}
-.side{margin-left: 2rem}
-button{margin-right: 0.5rem}
-.red:focus{background-color: #ce3431}
-.orange:focus{background-color: #e89a2b}
-.green:focus{background-color: #5cb65c}
-
-.active.red{background-color: #ce3431}
-.active.orange{background-color: #e89a2b}
-.active.green{background-color: #5cb65c}
+.container { display: flex; }
+.side { margin-left: 2rem; }
+input[type=range] {
+  width: 100%;
+  margin: 10px 0;
+}
+.search-box {
+  margin-bottom: 1rem;
+}
 </style>
 
 <script>
 export default {
   data() {
     return {
+      selectedSvg: '',
+      svgOptions: {
+        hyperlaxityLevel3: '/hyperlax3-ant.svg',
+        // Add other SVG paths as needed
+      },
+      currentSvg: '/sagittale-ant.svg',
       rotationZ: 0,
       rotationA: 0,
       activeJarret: null,
@@ -70,91 +61,73 @@ export default {
     };
   },
   methods: {
-    changeColor(elementId, color) {
-      const svgDocument = this.$refs.svgElement.contentDocument;
-      const element = svgDocument.getElementById(elementId);
-      if (element) {
-        element.style.fill = color;
-        console.log(`Couleur de ${elementId} changée en ${color}`);
+    updateSvg() {
+      const newSvgPath = this.svgOptions[this.selectedSvg];
+      console.log(`Selected SVG: ${this.selectedSvg}, Path: ${newSvgPath}`);
+      if (newSvgPath) {
+        this.currentSvg = newSvgPath;
+      } else {
+        console.error('SVG path not found for the selected option');
+      }
+    },
+    handleSliderChange(elementId, angle) {
+      const strokeColor = this.determineStrokeColor(angle);
+      const strokeWidth = '2pt'; // Adjust as needed
+      this.rotateElement(elementId, angle, strokeColor, strokeWidth);
+    },
+    determineStrokeColor(angle) {
+      if (angle >= 5 || angle <= -5) {
+        return '#d03431'; // Red
+      } else if (angle > -5 && angle < 5) {
+        return '#ea9c2b'; // Orange
+      } else {
+        return '#5cb85c'; // Green
       }
     },
     rotateElement(elementId, angle, strokeColor, strokeWidth) {
       const svgDocument = this.$refs.svgElement.contentDocument;
-      console.log(`Rotation de ${elementId} de ${angle} degrés avec couleur ${strokeColor} et épaisseur de trait ${strokeWidth}`);
-
       const element = svgDocument.getElementById(elementId);
       const pivot = svgDocument.getElementById(elementId + '-join');
-      const dev = svgDocument.getElementById(elementId + '-dev');
-      if (elementId.includes('ant-Z')) {
-        this.activeJarret = angle;
-      } else if (elementId.includes('ant-A')) {
-        this.activeCarpe = angle;
-      } else if (elementId.includes('ant-B')) {
-        this.activeBoulet = angle;
-      } else if (elementId.includes('ant-C')) {
-        this.activePieds = angle;
-      }
-      if (element) {
-        if (pivot) {
-          const cx = pivot.cx.baseVal.value;
-          const cy = pivot.cy.baseVal.value;
-          console.log(`Centre de rotation : (${cx}, ${cy})`);
-          element.setAttribute('transform', `rotate(${angle}, ${cx}, ${cy})`);
-          console.log(`Attribut 'transform' appliqué : ${element.getAttribute('transform')}`);
+      const devElement = svgDocument.getElementById(elementId + '-dev'); // Get the -dev element
 
-          pivot.style.stroke = strokeColor;
-          pivot.style.strokeWidth = strokeWidth;
-        } else {
-          console.log(`Pivot introuvable pour ${elementId}`);
+      if (element && pivot) {
+        // Calculate the pivot point
+        const cx = pivot.cx.baseVal.value;
+        const cy = pivot.cy.baseVal.value;
+
+        // Apply rotation and style to the main element
+        element.setAttribute('transform', `rotate(${angle}, ${cx}, ${cy})`);
+        pivot.style.stroke = strokeColor;
+        pivot.style.strokeWidth = strokeWidth;
+
+        // Apply the same styles to the -dev element if it exists
+        if (devElement) {
+          devElement.style.stroke = strokeColor;
+          devElement.style.strokeWidth = strokeWidth;
+          // Apply rotation to the dev element (uncomment if needed)
+          // devElement.setAttribute('transform', `rotate(${angle}, ${cx}, ${cy})`);
         }
 
-        if (dev) {
-          dev.style.stroke = strokeColor;
-          dev.style.strokeWidth = strokeWidth;
-        } else {
-          console.log(`Dev introuvable pour ${elementId}`);
+        // Update the angle values for each part based on elementId
+        if (elementId.includes('ant-Z')) {
+          this.angleJarret = parseFloat(angle);
+        } else if (elementId.includes('ant-A')) {
+          this.angleCarpe = parseFloat(angle);
+        } else if (elementId.includes('ant-B')) {
+          this.angleBoulet = parseFloat(angle);
+        } else if (elementId.includes('ant-C')) {
+          this.anglePieds = parseFloat(angle);
         }
 
-        const devTop = svgDocument.getElementById(elementId + '-dev-top');
-        if (devTop) {
-          devTop.style.stroke = strokeColor;
-          devTop.style.strokeWidth = strokeWidth;
-        } else {
-          console.log(`Dev-Top introuvable pour ${elementId}`);
-        }
+        // Recalculate total angle
+        this.totalAngle = this.angleJarret + this.angleCarpe + this.angleBoulet + this.anglePieds;
 
-        // Mise à jour des rotations et vérification des conditions
-        if (elementId === 'ant-Z') {
-          this.rotationZ = parseFloat(angle);
-          console.log(this.rotationZ)
-          console.log(this.rotationA)
-        } else if (elementId === 'ant-A') {
-          this.rotationA = parseFloat(angle);
-          console.log(this.rotationZ)
-          console.log(this.rotationA)
-        }
-
-        this.checkRotations();
+        // Apply rotation to ant-mask-foot if needed (existing logic)
+        this.applyRotationToMaskFoot();
       } else {
-        console.log(`Élément principal introuvable pour ${elementId}`);
+        console.error(`Element or pivot not found for ${elementId}`);
       }
-      if (elementId.includes('ant-Z')) {
-        this.angleJarret = parseFloat(angle);
-      } else if (elementId.includes('ant-A')) {
-        this.angleCarpe = parseFloat(angle);
-      } else if (elementId.includes('ant-B')) {
-        this.angleBoulet = parseFloat(angle);
-      } else if (elementId.includes('ant-C')) {
-        this.anglePieds = parseFloat(angle);
-      }
-
-      // Recalcul de totalAngle
-      this.totalAngle = this.angleJarret + this.angleCarpe + this.angleBoulet + this.anglePieds;
-
-      // Application de la rotation à ant-mask-foot
-      this.applyRotationToMaskFoot();
     },
-
     applyRotationToMaskFoot() {
       const svgDocument = this.$refs.svgElement.contentDocument;
       const maskFoot = svgDocument.getElementById('ant-mask-foot');
