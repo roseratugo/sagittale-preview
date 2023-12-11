@@ -73,6 +73,7 @@ button:focus-visible {
 @media only screen and (min-device-width : 320px) and (max-device-width : 705px) {
   #app {
     padding: 0 !important;
+    overflow: hidden;
   }
 }
 @media (prefers-color-scheme: light) {
