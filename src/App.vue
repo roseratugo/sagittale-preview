@@ -199,7 +199,7 @@ h2{margin: 0px}
 .slider{height: 120px; width: 200px; display: flex; flex-direction: column; justify-content: center}
 .container { display: flex; }
 .side { margin-right: 2rem; }
-/* Style for the slider thumb */
+
 .slider-thumb {
   -webkit-appearance: none;
   appearance: none;
@@ -210,13 +210,11 @@ h2{margin: 0px}
   cursor: pointer;
 }
 
-/* Dynamic background colors based on class */
 .slider-thumb.green { background: #5CB85C; }
 .slider-thumb.light-red { background: #ED9D2B; }
 .slider-thumb.red { background: #D23430; }
 .slider-thumb.dark-red { background: #D23430; }
 
-/* Styles for the slider track */
 input[type=range] {
   width: 100%;
   margin: 10px 0;
@@ -246,11 +244,6 @@ export default {
   data() {
     return {
       selectedSvg: '',
-      svgOptions: {
-        hyperlaxityLevel3: '/hyperlax3-ant.svg',
-        boultureLevel4:'/boulture4-ant.svg'
-        // Add other SVG paths as needed
-      },
       colorThresholds: {
         carpe: {
           lightRedNegative: -4.7134, redNegative: -9.4267, darkRedNegative: -14.14,
@@ -289,7 +282,6 @@ export default {
   },
   methods: {
     validateSliders() {
-      // Vérifier et mettre à jour le slider Carpe si son état par défaut est true
       if (this.defaultCarpe) {
         this.calculatedAngleCarpe = 0;
         this.angleCarpe = 0;
@@ -297,28 +289,24 @@ export default {
         this.defaultCarpe = false;
       }
 
-      // Vérifier et mettre à jour le slider Boulet si son état par défaut est true
       if (this.defaultBoulet) {
         this.angleBoulet = 0;
         this.handleBouletSliderChange();
         this.defaultBoulet = false;
       }
 
-      // Vérifier et mettre à jour le slider Pied si son état par défaut est true
       if (this.defaultPied) {
         this.anglePieds = 0;
         this.handlePiedSliderChange();
         this.defaultPied = false;
       }
 
-      // Mettre à jour les éléments SVG en vert pour ceux modifiés
       this.updateSvgElementsForValidation();
     },
 
     updateSvgElementsForValidation() {
       const svgDocument = this.$refs.svgElement.contentDocument;
       if (svgDocument) {
-        // Mettre à jour chaque partie du SVG en vert si l'état par défaut était true
         if (!this.defaultCarpe) {
           this.updateSvgElementColor(svgDocument, 'ant-A', '#5CB85C');
         }
@@ -349,18 +337,15 @@ export default {
       }
     },
     resetSliders() {
-      // Réinitialiser les valeurs des sliders
       this.calculatedAngleCarpe = 0;
       this.angleCarpe = 0;
       this.angleBoulet = 0;
       this.anglePieds = 0;
 
-      // Appeler les méthodes de gestion des sliders pour mettre à jour les SVG
       this.handlePiedSliderChange();
       this.handleCarpeSliderChange();
       this.handleBouletSliderChange();
 
-      // Réinitialiser les états par défaut
       this.defaultPied = true;
       this.defaultCarpe = true;
       this.defaultBoulet = true;
@@ -371,7 +356,6 @@ export default {
 
       const svgDocument = this.$refs.svgElement.contentDocument;
       if (svgDocument) {
-        // Modifier les éléments -dev, -dev-top et -join
         ['ant-A', 'ant-B', 'ant-C'].forEach(elementId => {
           const devElement = svgDocument.getElementById(elementId + '-dev');
           const devTopElement = svgDocument.getElementById(elementId + '-dev-top');
@@ -406,7 +390,6 @@ export default {
       this.userInteractedBoulet = false;
       this.adjustSvgElements('ant-B');
 
-      // Vérifie si defaultCarpe est true et ajuste les éléments SVG si nécessaire
       if (this.defaultCarpe) {
         this.adjustSvgElements('ant-A');
       }
@@ -443,11 +426,10 @@ export default {
       if ((sliderName === 'carpe' && this.defaultCarpe) ||
           (sliderName === 'boulet' && this.defaultBoulet) ||
           (sliderName === 'pied' && this.defaultPied)) {
-        return ''; // Retourne une chaîne vide si l'état par défaut est true
+        return '';
       }
 
       value = parseFloat(value);
-      // Définir les textes de libellé en fonction des seuils
       if (sliderName === 'carpe') {
         value = this.calculatedAngleCarpe;
         if (value <= -14.14) return 'Flexion Sévère';
@@ -473,7 +455,6 @@ export default {
         if (value >= 8) return 'Extension Modérée';
         if (value >= 4) return 'Extension Discrète';
       }
-      // Répétez pour les autres sliders
       return 'Normal';
     },
     computeSliderClass(sliderName) {
@@ -496,7 +477,7 @@ export default {
     handleSliderChange(elementId, angle) {
       const sliderName = elementId.includes('ant-A') ? 'carpe' :
           elementId.includes('ant-B') ? 'boulet' :
-              'pied'; // Exemple de détermination du sliderName
+              'pied';
 
       if ((sliderName === 'carpe' && this.userInteractedCarpe) ||
           (sliderName === 'boulet' && this.userInteractedBoulet) ||
@@ -507,15 +488,13 @@ export default {
       }
 
       const strokeColor = this.determineStrokeColor(sliderName, angle);
-      const strokeWidth = '2pt'; // Adjust as needed
+      const strokeWidth = '2pt';
       this.rotateElement(elementId, angle, strokeColor, strokeWidth);
     },
     handleCarpeSliderChange() {
       this.userInteractedCarpe = true;
       this.angleCarpe = this.calculatedAngleCarpe;
       this.angleJarret = 5.8 * (this.angleCarpe / -14.14);
-
-      // Ensuring Jarret does not exceed its maximum range
       if (this.angleJarret > 5.8) {
         this.angleJarret = 5.8;
       }
@@ -531,7 +510,6 @@ export default {
       this.userInteractedBoulet = true;
       this.angleCarpe = 14.14 * (this.angleBoulet / -36);
 
-      // Ensuring Carpe does not exceed its maximum range
       if (this.angleCarpe > 14.14) {
         this.angleCarpe = 14.14;
       }
@@ -539,8 +517,8 @@ export default {
         this.angleCarpe = -14.14;
       }
 
-      this.handleSliderChange('ant-A', this.angleCarpe); // Adjust Carpe only
-      this.handleSliderChange('ant-B', this.angleBoulet); // Continue to adjust Boulet
+      this.handleSliderChange('ant-A', this.angleCarpe);
+      this.handleSliderChange('ant-B', this.angleBoulet);
     },
 
     handlePiedSliderChange() {
@@ -553,23 +531,18 @@ export default {
       angle = parseFloat(angle);
       if (sliderName === 'carpe') {
         angle = this.calculatedAngleCarpe;
-        // Utilisez des seuils spécifiques pour Carpe
-        if (angle <= -14.14 || angle >= 14.1398) return '#d03431'; // Rouge pour Flexion/Extension Sévère
-        if (angle <= -9.4267 || angle >= 9.4265) return '#d03431'; // Orange pour Flexion/Extension Modérée
-        if (angle <= -4.7134 || angle >= 4.7132) return '#ea9c2b'; // Vert pour Flexion/Extension Discrète
+        if (angle <= -14.14 || angle >= 14.1398) return '#d03431';
+        if (angle <= -9.4267 || angle >= 9.4265) return '#d03431';
+        if (angle <= -4.7134 || angle >= 4.7132) return '#ea9c2b';
       } else if (sliderName === 'boulet') {
-        // Utilisez des seuils spécifiques pour Boulet
-        if (angle <= -36 || angle >= 36) return '#d03431'; // Rouge pour Flexion/Extension Sévère
-        if (angle <= -24 || angle >= 24) return '#d03431'; // Orange pour Flexion/Extension Modérée
-        if (angle <= -12 || angle >= 12) return '#ea9c2b'; // Vert pour Flexion/Extension Discrète
+        if (angle <= -36 || angle >= 36) return '#d03431';
+        if (angle <= -24 || angle >= 24) return '#d03431';
+        if (angle <= -12 || angle >= 12) return '#ea9c2b';
       } else if (sliderName === 'pied') {
-        // Utilisez des seuils spécifiques pour Pied
-        if (angle <= -12 || angle >= 12) return '#d03431'; // Rouge pour Flexion/Extension Sévère
-        if (angle <= -8 || angle >= 8) return '#d03431'; // Orange pour Flexion/Extension Modérée
-        if (angle <= -4 || angle >= 4) return '#ea9c2b'; // Vert pour Flexion/Extension Discrète
+        if (angle <= -12 || angle >= 12) return '#d03431';
+        if (angle <= -8 || angle >= 8) return '#d03431';
+        if (angle <= -4 || angle >= 4) return '#ea9c2b';
       }
-
-      // Fallback au cas où
       return '#5cb85c'; // Vert par défaut
     },
 
@@ -577,22 +550,19 @@ export default {
       const svgDocument = this.$refs.svgElement.contentDocument;
       const element = svgDocument.getElementById(elementId);
       const pivot = svgDocument.getElementById(elementId + '-join');
-      const devElement = svgDocument.getElementById(elementId + '-dev'); // Get the -dev element
+      const devElement = svgDocument.getElementById(elementId + '-dev');
       const devTopElement = svgDocument.getElementById(elementId + '-dev-top');
 
       if (element && pivot) {
-        // Calculate the pivot point
         const cx = pivot.cx.baseVal.value;
         const cy = pivot.cy.baseVal.value;
 
-        // Apply rotation and style to the main element
         element.setAttribute('transform', `rotate(${angle}, ${cx}, ${cy})`);
         if (pivot.id !== "ant-Z-join") {
           pivot.style.stroke = strokeColor;
           pivot.style.strokeWidth = strokeWidth;
         }
 
-        // Apply the same styles to the -dev element if it exists
         if (devElement) {
           devElement.style.stroke = strokeColor;
           devElement.style.strokeWidth = strokeWidth;
@@ -602,7 +572,6 @@ export default {
           }
         }
 
-        // Update the angle values for each part based on elementId
         if (elementId.includes('ant-Z')) {
           this.angleJarret = parseFloat(angle);
         } else if (elementId.includes('ant-A')) {
@@ -613,10 +582,8 @@ export default {
           this.anglePieds = parseFloat(angle);
         }
 
-        // Recalculate total angle
         this.totalAngle = this.angleJarret + this.angleCarpe + this.angleBoulet + this.anglePieds;
 
-        // Apply rotation to ant-mask-foot if needed (existing logic)
         this.applyRotationToMaskFoot();
       } else {
         console.error(`Element or pivot not found for ${elementId}`);
