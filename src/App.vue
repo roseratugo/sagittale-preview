@@ -22,7 +22,7 @@
             <div class="dev-select-panel">
               <strong>Carpe</strong>
               <div class="dev-information">
-                <input type="range" min="-14.14" max="14.14" step="4.7133" :style="{ background: defaultCarpe ? '#808080' : '' }" v-model="calculatedAngleCarpe" @input="handleCarpeSliderChange" :class="computeSliderClass('carpe')(angleCarpe)"><br>
+                <input type="range" min="-14.14" max="14.14" step="4.7133" :style="{ background: defaultCarpe ? '#808080' : '' }" v-model="calculatedAngleCarpe" @input="handleCarpeSliderChange" @click="handleSliderClick('carpe')" :class="computeSliderClass('carpe')(angleCarpe)"><br>
                 <div class="btn btn-link" @click="resetCarpe"><font-awesome-icon icon="eraser" /></div>
                 <p class="libelle">{{ getLibelleText('carpe', angleCarpe) }}</p>
               </div>
@@ -30,7 +30,7 @@
             <div class="dev-select-panel">
               <strong>Boulet</strong>
               <div class="dev-information">
-                <input type="range" min="-36" max="36" step="12" :style="{ background: defaultBoulet ? '#808080' : '' }" v-model="angleBoulet" @input="handleBouletSliderChange" :class="computeSliderClass('boulet')(angleBoulet)">
+                <input type="range" min="-36" max="36" step="12" :style="{ background: defaultBoulet ? '#808080' : '' }" v-model="angleBoulet" @input="handleBouletSliderChange" @click="handleSliderClick('boulet')" :class="computeSliderClass('boulet')(angleBoulet)">
                 <div class="btn btn-link" @click="resetBoulet"><font-awesome-icon icon="eraser" /></div>
                 <p class="libelle">{{ getLibelleText('boulet', angleBoulet) }}</p>
               </div>
@@ -38,7 +38,7 @@
             <div class="dev-select-panel">
               <strong>Pied</strong>
               <div class="dev-information">
-                <input type="range" min="-12" max="12" step="4" :style="{ background: defaultPied ? '#808080' : '' }" v-model="anglePieds" @input="handlePiedSliderChange" :class="computeSliderClass('pied')(anglePieds)">
+                <input type="range" min="-12" max="12" step="4" :style="{ transform: 'rotate(180deg)', background: defaultPied ? '#808080' : '' }" v-model="anglePieds" @input="handlePiedSliderChange" @click="handleSliderClick('pied')" :class="computeSliderClass('pied')(anglePieds)">
                 <div class="btn btn-link" @click="resetPied"><font-awesome-icon icon="eraser" /></div>
                 <p class="libelle">{{ getLibelleText('pied', anglePieds) }}</p>
               </div>
@@ -191,8 +191,14 @@ div{
   display: block;
 }
 
-
-
+@media only screen and (min-device-width : 320px) and (max-device-width : 705px) {
+  .col-4{
+    padding-right: 0;
+  }
+  object{
+    width: 300px;
+  }
+}
 
 p{margin: 10px}
 h2{margin: 0px}
@@ -336,6 +342,29 @@ export default {
         joinElement.style.stroke = color;
       }
     },
+
+    updateSvgElementStyle(elementId, color, strokeWidth) {
+      const svgDocument = this.$refs.svgElement.contentDocument;
+      if (svgDocument) {
+        const devElement = svgDocument.getElementById(elementId + '-dev');
+        const devTopElement = svgDocument.getElementById(elementId + '-dev-top');
+        const joinElement = svgDocument.getElementById(elementId + '-join');
+
+        if (devElement) {
+          devElement.style.stroke = color;
+          devElement.style.strokeWidth = strokeWidth;
+        }
+        if (devTopElement) {
+          devTopElement.style.stroke = color;
+          devTopElement.style.strokeWidth = strokeWidth;
+        }
+        if (joinElement) {
+          joinElement.style.stroke = color;
+          joinElement.style.strokeWidth = strokeWidth;
+        }
+      }
+    },
+
     resetSliders() {
       this.calculatedAngleCarpe = 0;
       this.angleCarpe = 0;
@@ -457,6 +486,7 @@ export default {
       }
       return 'Normal';
     },
+
     computeSliderClass(sliderName) {
       return (value) => {
         value = parseFloat(value);
@@ -474,6 +504,7 @@ export default {
         return 'slider-thumb green';
       };
     },
+
     handleSliderChange(elementId, angle) {
       const sliderName = elementId.includes('ant-A') ? 'carpe' :
           elementId.includes('ant-B') ? 'boulet' :
@@ -491,6 +522,7 @@ export default {
       const strokeWidth = '2pt';
       this.rotateElement(elementId, angle, strokeColor, strokeWidth);
     },
+
     handleCarpeSliderChange() {
       this.userInteractedCarpe = true;
       this.angleCarpe = this.calculatedAngleCarpe;
@@ -527,6 +559,22 @@ export default {
       this.handleSliderChange('ant-C', this.anglePieds);
     },
 
+    handleSliderClick(sliderName) {
+      if (sliderName === 'carpe' && this.defaultCarpe) {
+        this.userInteractedCarpe = true;
+        this.defaultCarpe = false;
+        this.updateSvgElementStyle('ant-A', '#5CB85C', '2pt');
+      } else if (sliderName === 'boulet' && this.defaultBoulet) {
+        this.userInteractedBoulet = true;
+        this.defaultBoulet = false;
+        this.updateSvgElementStyle('ant-B', '#5CB85C', '2pt');
+      } else if (sliderName === 'pied' && this.defaultPied) {
+        this.userInteractedPied = true;
+        this.defaultPied = false;
+        this.updateSvgElementStyle('ant-C', '#5CB85C', '2pt');
+      }
+    },
+
     determineStrokeColor(sliderName, angle) {
       angle = parseFloat(angle);
       if (sliderName === 'carpe') {
@@ -557,7 +605,10 @@ export default {
         const cx = pivot.cx.baseVal.value;
         const cy = pivot.cy.baseVal.value;
 
-        element.setAttribute('transform', `rotate(${angle}, ${cx}, ${cy})`);
+        // Appliquer l'inversion de l'angle directement dans la transformation si l'élément est le pied (ant-C)
+        const rotationAngle = elementId === 'ant-C' ? angle : angle;
+
+        element.setAttribute('transform', `rotate(${rotationAngle}, ${cx}, ${cy})`);
         if (pivot.id !== "ant-Z-join") {
           pivot.style.stroke = strokeColor;
           pivot.style.strokeWidth = strokeWidth;
@@ -589,6 +640,7 @@ export default {
         console.error(`Element or pivot not found for ${elementId}`);
       }
     },
+
     applyRotationToMaskFoot() {
       const svgDocument = this.$refs.svgElement.contentDocument;
       const maskFoot = svgDocument.getElementById('ant-mask-foot');
@@ -602,24 +654,6 @@ export default {
         maskFoot.setAttribute('transform', `rotate(${inverseAngle}, ${cx}, ${cy})`);
       }
     },
-    checkRotations() {
-      const svgDocument = this.$refs.svgElement.contentDocument;
-      const antNormal = svgDocument.getElementById('ant-normal');
-      const antExt2 = svgDocument.getElementById('ant-ext-2');
-
-      if (this.rotationZ === 5.8 && this.rotationA === -14.14) {
-        if (antNormal) antNormal.style.display = 'none';
-        if (antExt2) {
-          antExt2.style.display = 'block';
-          antExt2.style.fill = '#c6c5c4';
-          antExt2.style.stroke = '#c3c1c1';
-          antExt2.style.stroke = '2pt';
-        }
-      } else {
-        if (antNormal) antNormal.style.display = 'block';
-        if (antExt2) antExt2.style.display = 'none';
-      }
-    }
   }
 }
 </script>
