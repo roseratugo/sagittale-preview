@@ -458,12 +458,12 @@ export default {
         if (value >= 4.7132) return 'Extension Discret';
       }
       if (sliderName === 'boulet') {
-        if (value <= -36) return 'Extension Sévère';
-        if (value <= -24) return 'Extension Modérée';
-        if (value <= -12) return 'Extension Discrète';
-        if (value >= 36) return 'Flexion Sévère';
-        if (value >= 24) return 'Flexion Modérée';
-        if (value >= 12) return 'Flexion Discrète';
+        if (value <= -36) return 'Flexion Sévère';
+        if (value <= -24) return 'Flexion Modérée';
+        if (value <= -12) return 'Flexion Discrète';
+        if (value >= 36) return 'Extension Sévère';
+        if (value >= 24) return 'Extension Modérée';
+        if (value >= 12) return 'Extension Discrète';
       }
       if (sliderName === 'pied') {
         if (value <= -12) return 'Flexion Sévère';
