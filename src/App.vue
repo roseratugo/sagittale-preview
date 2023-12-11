@@ -3,7 +3,7 @@
   <div id="app">
     <div class="box">
       <div class="box-header">
-        <h4>Déviations sagittale</h4>
+        <h4>Déviations sagittales</h4>
       </div>
       <div class="box-body">
         <div class="top-button">
@@ -605,10 +605,7 @@ export default {
         const cx = pivot.cx.baseVal.value;
         const cy = pivot.cy.baseVal.value;
 
-        // Appliquer l'inversion de l'angle directement dans la transformation si l'élément est le pied (ant-C)
-        const rotationAngle = elementId === 'ant-C' ? angle : angle;
-
-        element.setAttribute('transform', `rotate(${rotationAngle}, ${cx}, ${cy})`);
+        element.setAttribute('transform', `rotate(${angle}, ${cx}, ${cy})`);
         if (pivot.id !== "ant-Z-join") {
           pivot.style.stroke = strokeColor;
           pivot.style.strokeWidth = strokeWidth;
