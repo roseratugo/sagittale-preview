@@ -535,9 +535,6 @@ export default {
         this.angleJarret = -5.8;
       }
 
-      const color = this.determineStrokeColor('carpe', this.calculatedAngleCarpe);
-      this.updateSvgElementStyle('ant-A', color, '2pt');
-
       this.handleSliderChange('ant-A', this.angleJarret);
       this.handleSliderChange('ant-B', this.angleCarpe);
     },
@@ -617,10 +614,6 @@ export default {
         if (pivot.id !== "ant-A-join") {
           pivot.style.stroke = strokeColor;
           pivot.style.strokeWidth = strokeWidth;
-        }
-        if (elementId.includes('ant-B')) {
-          // Apply the same color to 'ant-A-dev' as 'ant-B-dev'
-          this.updateSvgElementStyle('ant-A', strokeColor, strokeWidth);
         }
 
         if (devElement) {
