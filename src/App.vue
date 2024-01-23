@@ -30,7 +30,7 @@
             <div class="dev-select-panel">
               <strong>Boulet</strong>
               <div class="dev-information">
-                <input type="range" min="-36" max="36" step="12" :style="{ background: defaultBoulet ? '#808080' : '' }" v-model="angleBoulet" @input="handleBouletSliderChange" @click="handleSliderClick('boulet')" :class="computeSliderClass('boulet')(angleBoulet)">
+                <input type="range" min="-36" max="36" step="12" :style="{ transform: 'rotate(180deg)', background: defaultBoulet ? '#808080' : '' }" v-model="angleBoulet" @input="handleBouletSliderChange" @click="handleSliderClick('boulet')" :class="computeSliderClass('boulet')(angleBoulet)">
                 <div class="btn btn-link" @click="resetBoulet"><font-awesome-icon icon="eraser" /></div>
                 <p class="libelle">{{ getLibelleText('boulet', angleBoulet) }}</p>
               </div>
@@ -277,6 +277,7 @@ export default {
       angleBoulet: 0,
       anglePieds: 0,
       totalAngle: 0,
+      totalAngleWithoutFoot: 0,
       calculatedAngleCarpe: 0,
       defaultCarpe: true,
       defaultBoulet: true,
@@ -385,7 +386,7 @@ export default {
 
       const svgDocument = this.$refs.svgElement.contentDocument;
       if (svgDocument) {
-        ['ant-B', 'ant-C', 'ant-D'].forEach(elementId => {
+        ['ant-A', 'ant-B', 'ant-C', 'ant-D'].forEach(elementId => {
           const devElement = svgDocument.getElementById(elementId + '-dev');
           const devTopElement = svgDocument.getElementById(elementId + '-dev-top');
           const joinElement = svgDocument.getElementById(elementId + '-join');
@@ -534,22 +535,29 @@ export default {
         this.angleJarret = -5.8;
       }
 
+      const color = this.determineStrokeColor('carpe', this.calculatedAngleCarpe);
+      this.updateSvgElementStyle('ant-A', color, '2pt');
+
       this.handleSliderChange('ant-A', this.angleJarret);
       this.handleSliderChange('ant-B', this.angleCarpe);
     },
 
     handleBouletSliderChange() {
+      // this.userInteractedBoulet = true;
+      // this.angleCarpe = 14.14 * (this.angleBoulet / -36);
+      //
+      // if (this.angleCarpe > 14.14) {
+      //   this.angleCarpe = 14.14;
+      // }
+      // if (this.angleCarpe < -14.14) {
+      //   this.angleCarpe = -14.14;
+      // }
+      //
+      // this.handleSliderChange('ant-B', this.angleCarpe);
+      // this.handleSliderChange('ant-C', this.angleBoulet);
+
       this.userInteractedBoulet = true;
-      this.angleCarpe = 14.14 * (this.angleBoulet / -36);
-
-      if (this.angleCarpe > 14.14) {
-        this.angleCarpe = 14.14;
-      }
-      if (this.angleCarpe < -14.14) {
-        this.angleCarpe = -14.14;
-      }
-
-      this.handleSliderChange('ant-B', this.angleCarpe);
+      this.defaultBoulet = false;
       this.handleSliderChange('ant-C', this.angleBoulet);
     },
 
@@ -610,6 +618,10 @@ export default {
           pivot.style.stroke = strokeColor;
           pivot.style.strokeWidth = strokeWidth;
         }
+        if (elementId.includes('ant-B')) {
+          // Apply the same color to 'ant-A-dev' as 'ant-B-dev'
+          this.updateSvgElementStyle('ant-A', strokeColor, strokeWidth);
+        }
 
         if (devElement) {
           devElement.style.stroke = strokeColor;
@@ -630,23 +642,44 @@ export default {
           this.anglePieds = parseFloat(angle);
         }
 
+        this.totalAngleWithoutFoot = this.angleJarret + this.angleCarpe + this.angleBoulet;
         this.totalAngle = this.angleJarret + this.angleCarpe + this.angleBoulet + this.anglePieds;
 
         this.applyRotationToMaskFoot();
+        this.applyRotationToFoot();
       } else {
         console.error(`Element or pivot not found for ${elementId}`);
+      }
+    },
+    applyRotationToFoot() {
+      const svgDocument = this.$refs.svgElement.contentDocument;
+      const foot = svgDocument.getElementById('ant-normal');
+      const footDev = svgDocument.getElementById('ant-D-dev');
+      const footJoin = svgDocument.getElementById('ant-E-join');
+      const pivot = svgDocument.getElementById('ant-D-join');
+
+      if (foot && pivot) {
+        const inverseAngle = -this.totalAngleWithoutFoot;
+        const cx = pivot.cx.baseVal.value;
+        const cy = pivot.cy.baseVal.value;
+
+        foot.setAttribute('transform', `rotate(${inverseAngle}, ${cx}, ${cy})`);
+        footDev.setAttribute('transform', `rotate(${inverseAngle}, ${cx}, ${cy})`);
+        footJoin.setAttribute('transform', `rotate(${inverseAngle}, ${cx}, ${cy})`);
       }
     },
 
     applyRotationToMaskFoot() {
       const svgDocument = this.$refs.svgElement.contentDocument;
       const maskFoot = svgDocument.getElementById('ant-mask-foot');
-      const pivot = svgDocument.getElementById('ant-D-join');
+      const pivot = svgDocument.getElementById('ant-E-join');
 
       if (maskFoot && pivot) {
         const inverseAngle = -this.totalAngle;
         const cx = pivot.cx.baseVal.value;
         const cy = pivot.cy.baseVal.value;
+
+
 
         maskFoot.setAttribute('transform', `rotate(${inverseAngle}, ${cx}, ${cy})`);
       }
