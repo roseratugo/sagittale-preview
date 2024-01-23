@@ -264,7 +264,7 @@ export default {
           lightRed: 4, red: 8, darkRed: 12
         },
       },
-      currentSvg: '/sagittale-ant.svg',
+      currentSvg: '/dev-ant-left.svg',
       rotationZ: 0,
       rotationA: 0,
       activeJarret: null,
@@ -314,13 +314,13 @@ export default {
       const svgDocument = this.$refs.svgElement.contentDocument;
       if (svgDocument) {
         if (!this.defaultCarpe) {
-          this.updateSvgElementColor(svgDocument, 'ant-A', '#5CB85C');
-        }
-        if (!this.defaultBoulet) {
           this.updateSvgElementColor(svgDocument, 'ant-B', '#5CB85C');
         }
-        if (!this.defaultPied) {
+        if (!this.defaultBoulet) {
           this.updateSvgElementColor(svgDocument, 'ant-C', '#5CB85C');
+        }
+        if (!this.defaultPied) {
+          this.updateSvgElementColor(svgDocument, 'ant-D', '#5CB85C');
         }
       }
     },
@@ -385,7 +385,7 @@ export default {
 
       const svgDocument = this.$refs.svgElement.contentDocument;
       if (svgDocument) {
-        ['ant-A', 'ant-B', 'ant-C'].forEach(elementId => {
+        ['ant-B', 'ant-C', 'ant-D'].forEach(elementId => {
           const devElement = svgDocument.getElementById(elementId + '-dev');
           const devTopElement = svgDocument.getElementById(elementId + '-dev-top');
           const joinElement = svgDocument.getElementById(elementId + '-join');
@@ -409,7 +409,7 @@ export default {
       this.handleCarpeSliderChange();
       this.defaultCarpe = true;
       this.userInteractedCarpe = false;
-      this.adjustSvgElements('ant-A');
+      this.adjustSvgElements('ant-B');
     },
 
     resetBoulet() {
@@ -417,10 +417,10 @@ export default {
       this.handleBouletSliderChange();
       this.defaultBoulet = true;
       this.userInteractedBoulet = false;
-      this.adjustSvgElements('ant-B');
+      this.adjustSvgElements('ant-C');
 
       if (this.defaultCarpe) {
-        this.adjustSvgElements('ant-A');
+        this.adjustSvgElements('ant-B');
       }
     },
 
@@ -429,7 +429,7 @@ export default {
       this.handlePiedSliderChange();
       this.defaultPied = true;
       this.userInteractedPied = false;
-      this.adjustSvgElements('ant-C');
+      this.adjustSvgElements('ant-D');
     },
 
     adjustSvgElements(elementId) {
@@ -506,8 +506,8 @@ export default {
     },
 
     handleSliderChange(elementId, angle) {
-      const sliderName = elementId.includes('ant-A') ? 'carpe' :
-          elementId.includes('ant-B') ? 'boulet' :
+      const sliderName = elementId.includes('ant-B') ? 'carpe' :
+          elementId.includes('ant-C') ? 'boulet' :
               'pied';
 
       if ((sliderName === 'carpe' && this.userInteractedCarpe) ||
@@ -534,8 +534,8 @@ export default {
         this.angleJarret = -5.8;
       }
 
-      this.handleSliderChange('ant-Z', this.angleJarret);
-      this.handleSliderChange('ant-A', this.angleCarpe);
+      this.handleSliderChange('ant-A', this.angleJarret);
+      this.handleSliderChange('ant-B', this.angleCarpe);
     },
 
     handleBouletSliderChange() {
@@ -549,29 +549,29 @@ export default {
         this.angleCarpe = -14.14;
       }
 
-      this.handleSliderChange('ant-A', this.angleCarpe);
-      this.handleSliderChange('ant-B', this.angleBoulet);
+      this.handleSliderChange('ant-B', this.angleCarpe);
+      this.handleSliderChange('ant-C', this.angleBoulet);
     },
 
     handlePiedSliderChange() {
       this.userInteractedPied = true;
       this.defaultPied = false;
-      this.handleSliderChange('ant-C', this.anglePieds);
+      this.handleSliderChange('ant-D', this.anglePieds);
     },
 
     handleSliderClick(sliderName) {
       if (sliderName === 'carpe' && this.defaultCarpe) {
         this.userInteractedCarpe = true;
         this.defaultCarpe = false;
-        this.updateSvgElementStyle('ant-A', '#5CB85C', '2pt');
+        this.updateSvgElementStyle('ant-B', '#5CB85C', '2pt');
       } else if (sliderName === 'boulet' && this.defaultBoulet) {
         this.userInteractedBoulet = true;
         this.defaultBoulet = false;
-        this.updateSvgElementStyle('ant-B', '#5CB85C', '2pt');
+        this.updateSvgElementStyle('ant-C', '#5CB85C', '2pt');
       } else if (sliderName === 'pied' && this.defaultPied) {
         this.userInteractedPied = true;
         this.defaultPied = false;
-        this.updateSvgElementStyle('ant-C', '#5CB85C', '2pt');
+        this.updateSvgElementStyle('ant-D', '#5CB85C', '2pt');
       }
     },
 
@@ -606,7 +606,7 @@ export default {
         const cy = pivot.cy.baseVal.value;
 
         element.setAttribute('transform', `rotate(${angle}, ${cx}, ${cy})`);
-        if (pivot.id !== "ant-Z-join") {
+        if (pivot.id !== "ant-A-join") {
           pivot.style.stroke = strokeColor;
           pivot.style.strokeWidth = strokeWidth;
         }
@@ -620,13 +620,13 @@ export default {
           }
         }
 
-        if (elementId.includes('ant-Z')) {
+        if (elementId.includes('ant-A')) {
           this.angleJarret = parseFloat(angle);
-        } else if (elementId.includes('ant-A')) {
-          this.angleCarpe = parseFloat(angle);
         } else if (elementId.includes('ant-B')) {
-          this.angleBoulet = parseFloat(angle);
+          this.angleCarpe = parseFloat(angle);
         } else if (elementId.includes('ant-C')) {
+          this.angleBoulet = parseFloat(angle);
+        } else if (elementId.includes('ant-D')) {
           this.anglePieds = parseFloat(angle);
         }
 
@@ -641,7 +641,7 @@ export default {
     applyRotationToMaskFoot() {
       const svgDocument = this.$refs.svgElement.contentDocument;
       const maskFoot = svgDocument.getElementById('ant-mask-foot');
-      const pivot = svgDocument.getElementById('ant-C-join');
+      const pivot = svgDocument.getElementById('ant-D-join');
 
       if (maskFoot && pivot) {
         const inverseAngle = -this.totalAngle;
