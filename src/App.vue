@@ -463,12 +463,12 @@ export default {
       value = parseFloat(value);
       if (sliderName === 'carpe') {
         value = this.calculatedAngleCarpe;
-        if (value <= -14.14) return 'Flexion Sévère';
-        if (value <= -9.4267) return 'Flexion Modérée';
-        if (value <= -4.7134) return 'Flexion Discrète';
-        if (value >= 14.1398) return 'Extension Sévère';
-        if (value >= 9.4265) return 'Extension Modérée';
-        if (value >= 4.7132) return 'Extension Discret';
+        if (value <= -14.14) return 'Extension Sévère';
+        if (value <= -9.4267) return 'Extension Modérée';
+        if (value <= -4.7134) return 'Extension Discrète';
+        if (value >= 14.1398) return 'Flexion Sévère';
+        if (value >= 9.4265) return 'Flexion Modérée';
+        if (value >= 4.7132) return 'Flexion Discret';
       }
       if (sliderName === 'boulet') {
         if (value <= -36) return 'Flexion Sévère';
