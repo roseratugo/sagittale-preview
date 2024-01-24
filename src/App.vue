@@ -15,12 +15,12 @@
           <div class="col-4">
             <div>
               <div style="color: #6c757d !important; text-align: center !important; margin-bottom: 20px;">
-                <div class="badge" style="background-color: #a8a8a8 !important; color: #eeeeee; padding-right: 0.6em; padding-left: 0.6em; border-radius: 10rem;">AG</div><br>
-                <span style="font-size: 80%; font-weight: 400; white-space: nowrap !important;">Antérieur gauche</span>
+                <div class="badge" style="background-color: #a8a8a8 !important; color: #eeeeee; padding-right: 0.6em; padding-left: 0.6em; border-radius: 10rem;">PG</div><br>
+                <span style="font-size: 80%; font-weight: 400; white-space: nowrap !important;">Postérieur gauche</span>
               </div>
             </div>
             <div class="dev-select-panel">
-              <strong>Carpe</strong>
+              <strong>Tarse</strong>
               <div class="dev-information">
                 <input type="range" min="-14.14" max="14.14" step="4.7133" :style="{ background: defaultCarpe ? '#808080' : '' }" v-model="calculatedAngleCarpe" @input="handleCarpeSliderChange" @click="handleSliderClick('carpe')" :class="computeSliderClass('carpe')(angleCarpe)"><br>
                 <div class="btn btn-link" @click="resetCarpe"><font-awesome-icon icon="eraser" /></div>
@@ -30,7 +30,7 @@
             <div class="dev-select-panel">
               <strong>Boulet</strong>
               <div class="dev-information">
-                <input type="range" min="-36" max="36" step="12" :style="{ transform: 'rotate(180deg)', background: defaultBoulet ? '#808080' : '' }" v-model="angleBoulet" @input="handleBouletSliderChange" @click="handleSliderClick('boulet')" :class="computeSliderClass('boulet')(angleBoulet)">
+                <input type="range" min="-36" max="36" step="12" :style="{ background: defaultBoulet ? '#808080' : '' }" v-model="angleBoulet" @input="handleBouletSliderChange" @click="handleSliderClick('boulet')" :class="computeSliderClass('boulet')(angleBoulet)">
                 <div class="btn btn-link" @click="resetBoulet"><font-awesome-icon icon="eraser" /></div>
                 <p class="libelle">{{ getLibelleText('boulet', angleBoulet) }}</p>
               </div>
@@ -264,7 +264,7 @@ export default {
           lightRed: 4, red: 8, darkRed: 12
         },
       },
-      currentSvg: '/dev-ant-left.svg',
+      currentSvg: '/sagittale-post.svg',
       rotationZ: 0,
       rotationA: 0,
       activeJarret: null,
@@ -277,7 +277,6 @@ export default {
       angleBoulet: 0,
       anglePieds: 0,
       totalAngle: 0,
-      totalAngleWithoutFoot: 0,
       calculatedAngleCarpe: 0,
       defaultCarpe: true,
       defaultBoulet: true,
@@ -315,13 +314,13 @@ export default {
       const svgDocument = this.$refs.svgElement.contentDocument;
       if (svgDocument) {
         if (!this.defaultCarpe) {
-          this.updateSvgElementColor(svgDocument, 'ant-B', '#5CB85C');
+          this.updateSvgElementColor(svgDocument, 'post-A', '#5CB85C');
         }
         if (!this.defaultBoulet) {
-          this.updateSvgElementColor(svgDocument, 'ant-C', '#5CB85C');
+          this.updateSvgElementColor(svgDocument, 'post-B', '#5CB85C');
         }
         if (!this.defaultPied) {
-          this.updateSvgElementColor(svgDocument, 'ant-D', '#5CB85C');
+          this.updateSvgElementColor(svgDocument, 'post-C', '#5CB85C');
         }
       }
     },
@@ -386,7 +385,7 @@ export default {
 
       const svgDocument = this.$refs.svgElement.contentDocument;
       if (svgDocument) {
-        ['ant-A', 'ant-B', 'ant-C', 'ant-D'].forEach(elementId => {
+        ['post-A', 'post-B', 'post-C'].forEach(elementId => {
           const devElement = svgDocument.getElementById(elementId + '-dev');
           const devTopElement = svgDocument.getElementById(elementId + '-dev-top');
           const joinElement = svgDocument.getElementById(elementId + '-join');
@@ -410,7 +409,7 @@ export default {
       this.handleCarpeSliderChange();
       this.defaultCarpe = true;
       this.userInteractedCarpe = false;
-      this.adjustSvgElements('ant-B');
+      this.adjustSvgElements('post-A');
     },
 
     resetBoulet() {
@@ -418,10 +417,10 @@ export default {
       this.handleBouletSliderChange();
       this.defaultBoulet = true;
       this.userInteractedBoulet = false;
-      this.adjustSvgElements('ant-C');
+      this.adjustSvgElements('post-B');
 
       if (this.defaultCarpe) {
-        this.adjustSvgElements('ant-B');
+        this.adjustSvgElements('post-A');
       }
     },
 
@@ -430,7 +429,7 @@ export default {
       this.handlePiedSliderChange();
       this.defaultPied = true;
       this.userInteractedPied = false;
-      this.adjustSvgElements('ant-D');
+      this.adjustSvgElements('post-C');
     },
 
     adjustSvgElements(elementId) {
@@ -507,8 +506,8 @@ export default {
     },
 
     handleSliderChange(elementId, angle) {
-      const sliderName = elementId.includes('ant-B') ? 'carpe' :
-          elementId.includes('ant-C') ? 'boulet' :
+      const sliderName = elementId.includes('post-A') ? 'carpe' :
+          elementId.includes('post-B') ? 'boulet' :
               'pied';
 
       if ((sliderName === 'carpe' && this.userInteractedCarpe) ||
@@ -535,48 +534,44 @@ export default {
         this.angleJarret = -5.8;
       }
 
-      this.handleSliderChange('ant-A', this.angleJarret);
-      this.handleSliderChange('ant-B', this.angleCarpe);
+      this.handleSliderChange('post-Z', this.angleJarret);
+      this.handleSliderChange('post-A', this.angleCarpe);
     },
 
     handleBouletSliderChange() {
-      // this.userInteractedBoulet = true;
-      // this.angleCarpe = 14.14 * (this.angleBoulet / -36);
-      //
-      // if (this.angleCarpe > 14.14) {
-      //   this.angleCarpe = 14.14;
-      // }
-      // if (this.angleCarpe < -14.14) {
-      //   this.angleCarpe = -14.14;
-      // }
-      //
-      // this.handleSliderChange('ant-B', this.angleCarpe);
-      // this.handleSliderChange('ant-C', this.angleBoulet);
-
       this.userInteractedBoulet = true;
-      this.defaultBoulet = false;
-      this.handleSliderChange('ant-C', this.angleBoulet);
+      this.angleCarpe = 14.14 * (this.angleBoulet / -36);
+
+      if (this.angleCarpe > 14.14) {
+        this.angleCarpe = 14.14;
+      }
+      if (this.angleCarpe < -14.14) {
+        this.angleCarpe = -14.14;
+      }
+
+      this.handleSliderChange('post-A', this.angleCarpe);
+      this.handleSliderChange('post-B', this.angleBoulet);
     },
 
     handlePiedSliderChange() {
       this.userInteractedPied = true;
       this.defaultPied = false;
-      this.handleSliderChange('ant-D', this.anglePieds);
+      this.handleSliderChange('post-C', this.anglePieds);
     },
 
     handleSliderClick(sliderName) {
       if (sliderName === 'carpe' && this.defaultCarpe) {
         this.userInteractedCarpe = true;
         this.defaultCarpe = false;
-        this.updateSvgElementStyle('ant-B', '#5CB85C', '2pt');
+        this.updateSvgElementStyle('post-A', '#5CB85C', '2pt');
       } else if (sliderName === 'boulet' && this.defaultBoulet) {
         this.userInteractedBoulet = true;
         this.defaultBoulet = false;
-        this.updateSvgElementStyle('ant-C', '#5CB85C', '2pt');
+        this.updateSvgElementStyle('post-B', '#5CB85C', '2pt');
       } else if (sliderName === 'pied' && this.defaultPied) {
         this.userInteractedPied = true;
         this.defaultPied = false;
-        this.updateSvgElementStyle('ant-D', '#5CB85C', '2pt');
+        this.updateSvgElementStyle('post-C', '#5CB85C', '2pt');
       }
     },
 
@@ -611,7 +606,7 @@ export default {
         const cy = pivot.cy.baseVal.value;
 
         element.setAttribute('transform', `rotate(${angle}, ${cx}, ${cy})`);
-        if (pivot.id !== "ant-A-join") {
+        if (pivot.id !== "post-Z-join") {
           pivot.style.stroke = strokeColor;
           pivot.style.strokeWidth = strokeWidth;
         }
@@ -625,54 +620,33 @@ export default {
           }
         }
 
-        if (elementId.includes('ant-A')) {
+        if (elementId.includes('post-Z')) {
           this.angleJarret = parseFloat(angle);
-        } else if (elementId.includes('ant-B')) {
+        } else if (elementId.includes('post-A')) {
           this.angleCarpe = parseFloat(angle);
-        } else if (elementId.includes('ant-C')) {
+        } else if (elementId.includes('post-B')) {
           this.angleBoulet = parseFloat(angle);
-        } else if (elementId.includes('ant-D')) {
+        } else if (elementId.includes('post-C')) {
           this.anglePieds = parseFloat(angle);
         }
 
-        this.totalAngleWithoutFoot = this.angleJarret + this.angleCarpe + this.angleBoulet;
         this.totalAngle = this.angleJarret + this.angleCarpe + this.angleBoulet + this.anglePieds;
 
         this.applyRotationToMaskFoot();
-        this.applyRotationToFoot();
       } else {
         console.error(`Element or pivot not found for ${elementId}`);
-      }
-    },
-    applyRotationToFoot() {
-      const svgDocument = this.$refs.svgElement.contentDocument;
-      const foot = svgDocument.getElementById('ant-normal');
-      const footDev = svgDocument.getElementById('ant-D-dev');
-      const footJoin = svgDocument.getElementById('ant-E-join');
-      const pivot = svgDocument.getElementById('ant-D-join');
-
-      if (foot && pivot) {
-        const inverseAngle = -this.totalAngleWithoutFoot;
-        const cx = pivot.cx.baseVal.value;
-        const cy = pivot.cy.baseVal.value;
-
-        foot.setAttribute('transform', `rotate(${inverseAngle}, ${cx}, ${cy})`);
-        footDev.setAttribute('transform', `rotate(${inverseAngle}, ${cx}, ${cy})`);
-        footJoin.setAttribute('transform', `rotate(${inverseAngle}, ${cx}, ${cy})`);
       }
     },
 
     applyRotationToMaskFoot() {
       const svgDocument = this.$refs.svgElement.contentDocument;
-      const maskFoot = svgDocument.getElementById('ant-mask-foot');
-      const pivot = svgDocument.getElementById('ant-E-join');
+      const maskFoot = svgDocument.getElementById('post-mask-foot');
+      const pivot = svgDocument.getElementById('post-C-join');
 
       if (maskFoot && pivot) {
         const inverseAngle = -this.totalAngle;
         const cx = pivot.cx.baseVal.value;
         const cy = pivot.cy.baseVal.value;
-
-
 
         maskFoot.setAttribute('transform', `rotate(${inverseAngle}, ${cx}, ${cy})`);
       }
