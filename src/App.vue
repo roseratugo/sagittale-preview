@@ -115,6 +115,7 @@
   padding-left: 15px;
 }
 
+
 .col-2{
   flex: 0 0 60%;
   max-width: 60%;
