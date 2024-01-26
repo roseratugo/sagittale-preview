@@ -1,5 +1,5 @@
 <template>
-  <prototype-alert-modal></prototype-alert-modal>
+  <!--  <prototype-alert-modal></prototype-alert-modal>-->
   <div id="app">
     <div class="box">
       <div class="box-header">
@@ -15,14 +15,14 @@
           <div class="col-4">
             <div>
               <div style="color: #6c757d !important; text-align: center !important; margin-bottom: 20px;">
-                <div class="badge" style="background-color: #a8a8a8 !important; color: #eeeeee; padding-right: 0.6em; padding-left: 0.6em; border-radius: 10rem;">AG</div><br>
-                <span style="font-size: 80%; font-weight: 400; white-space: nowrap !important;">Antérieur gauche</span>
+                <div class="badge" style="background-color: #a8a8a8 !important; color: #eeeeee; padding-right: 0.6em; padding-left: 0.6em; border-radius: 10rem;">PG</div><br>
+                <span style="font-size: 80%; font-weight: 400; white-space: nowrap !important;">Postérieur gauche</span>
               </div>
             </div>
             <div class="dev-select-panel">
-              <strong>Carpe</strong>
+              <strong>Tarse</strong>
               <div class="dev-information">
-                <input type="range" min="-14.14" max="14.14" step="4.7133" :style="{ background: defaultCarpe ? '#808080' : '' }" v-model="calculatedAngleCarpe" @input="handleCarpeSliderChange" @click="handleSliderClick('carpe')" :class="computeSliderClass('carpe')(angleCarpe)"><br>
+                <input type="range" min="-3" max="3" step="1" :style="{ background: defaultCarpe ? '#808080' : '' }" v-model="sliderValueA" @input="handleCarpeSliderChange" @click="handleSliderClick('carpe')" :class="computeSliderClass('carpe')(angleA)"><br>
                 <div class="btn btn-link" @click="resetCarpe"><font-awesome-icon icon="eraser" /></div>
                 <p class="libelle">{{ getLibelleText('carpe', angleCarpe) }}</p>
               </div>
@@ -30,7 +30,7 @@
             <div class="dev-select-panel">
               <strong>Boulet</strong>
               <div class="dev-information">
-                <input type="range" min="-36" max="36" step="12" :style="{ transform: 'rotate(180deg)', background: defaultBoulet ? '#808080' : '' }" v-model="angleBoulet" @input="handleBouletSliderChange" @click="handleSliderClick('boulet')" :class="computeSliderClass('boulet')(angleBoulet)">
+                <input type="range" min="-3" max="3" step="1" :style="{ transform: 'rotate(180deg)', background: defaultBoulet ? '#808080' : '' }" v-model="sliderValueB" @input="handleBouletSliderChange" @click="handleSliderClick('boulet')" :class="computeSliderClass('boulet')(angleB)"><br>
                 <div class="btn btn-link" @click="resetBoulet"><font-awesome-icon icon="eraser" /></div>
                 <p class="libelle">{{ getLibelleText('boulet', angleBoulet) }}</p>
               </div>
@@ -38,7 +38,7 @@
             <div class="dev-select-panel">
               <strong>Pied</strong>
               <div class="dev-information">
-                <input type="range" min="-12" max="12" step="4" :style="{ transform: 'rotate(180deg)', background: defaultPied ? '#808080' : '' }" v-model="anglePieds" @input="handlePiedSliderChange" @click="handleSliderClick('pied')" :class="computeSliderClass('pied')(anglePieds)">
+                <input type="range" min="-3" max="3" step="1" :style="{ transform: 'rotate(180deg)', background: defaultPied ? '#808080' : '' }" v-model="sliderValueC" @input="handlePiedSliderChange" @click="handleSliderClick('pied')" :class="computeSliderClass('pied')(angleC)"><br>
                 <div class="btn btn-link" @click="resetPied"><font-awesome-icon icon="eraser" /></div>
                 <p class="libelle">{{ getLibelleText('pied', anglePieds) }}</p>
               </div>
@@ -125,7 +125,7 @@
 object{
   overflow: hidden;
   vertical-align: middle;
-  width: 400px;
+  width: 350px;
 }
 
 hr{
@@ -250,10 +250,18 @@ export default {
   data() {
     return {
       selectedSvg: '',
+      SIDE_DEVIATION: {
+        A_DEGS: [-14.1, -9.4, -4.7, 0, 4.7, 9.4, 14.1],
+        B_DEGS: [-36, -24, -12, 0, 12, 24, 36],
+        C_DEGS: [-21, -9, -6, 0, 4, 8, 12],
+      },
+      sliderValueA: 0,
+      sliderValueB: 0,
+      sliderValueC: 0,
       colorThresholds: {
         carpe: {
-          lightRedNegative: -4.7134, redNegative: -9.4267, darkRedNegative: -14.14,
-          lightRed: 4.7132, red: 9.4265, darkRed: 14.1398
+          lightRedNegative: -4.7, redNegative: -9.4, darkRedNegative: -14.1,
+          lightRed: 4.7, red: 9.4, darkRed: 14.1
         },
         boulet: {
           lightRedNegative: -12, redNegative: -24, darkRedNegative: -36,
@@ -285,9 +293,56 @@ export default {
       userInteractedCarpe: false,
       userInteractedBoulet: false,
       userInteractedPied: false,
+      maskFootMoved: false,
     };
   },
+  computed: {
+    angleA() {
+      const index = this.mapSliderValueToIndex(this.sliderValueA);
+      const value = this.SIDE_DEVIATION.A_DEGS[index];
+      return value;
+    },
+    angleB() {
+      const index = this.mapSliderValueToIndex(this.sliderValueB);
+      const value = this.SIDE_DEVIATION.B_DEGS[index];
+      return value;
+    },
+    angleC() {
+      const index = this.mapSliderValueToIndex(this.sliderValueC);
+      const value = this.SIDE_DEVIATION.C_DEGS[index];
+      return value;
+    },
+    // ...
+  },
   methods: {
+    adjustMaskFoot() {
+      const svgDocument = this.$refs.svgElement.contentDocument;
+      const maskFoot = svgDocument.getElementById('post-mask-foot');
+
+      if (maskFoot) {
+        const currentY = parseFloat(maskFoot.getAttribute('y') || 0);
+
+        if (this.angleB >= 24 && !this.maskFootMoved) {
+          maskFoot.setAttribute('y', currentY + 8);
+          this.maskFootMoved = true;
+        } else if (this.angleB < 24 && this.maskFootMoved) {
+          maskFoot.setAttribute('y', currentY - 8);
+          this.maskFootMoved = false;
+        }
+      }
+    },
+    mapSliderValueToIndex(sliderValue) {
+      console.log('Received sliderValue:', sliderValue); // Log pour vérifier la valeur reçue
+      const index = +sliderValue + 3; // Force la conversion en nombre
+      console.log('Computed index:', index); // Log pour vérifier l'index calculé
+
+      if (index >= 0 && index < this.SIDE_DEVIATION.B_DEGS.length) {
+        return index;
+      } else {
+        console.error('Index out of bounds:', index);
+        return 0; // Retournez une valeur sûre
+      }
+    },
     validateSliders() {
       if (this.defaultCarpe) {
         this.calculatedAngleCarpe = 0;
@@ -310,7 +365,6 @@ export default {
 
       this.updateSvgElementsForValidation();
     },
-
     updateSvgElementsForValidation() {
       const svgDocument = this.$refs.svgElement.contentDocument;
       if (svgDocument) {
@@ -325,7 +379,6 @@ export default {
         }
       }
     },
-
     updateSvgElementColor(svgDocument, elementId, color) {
       const devElement = svgDocument.getElementById(elementId + '-dev');
       const devTopElement = svgDocument.getElementById(elementId + '-dev-top');
@@ -343,7 +396,6 @@ export default {
         joinElement.style.stroke = color;
       }
     },
-
     updateSvgElementStyle(elementId, color, strokeWidth) {
       const svgDocument = this.$refs.svgElement.contentDocument;
       if (svgDocument) {
@@ -365,12 +417,18 @@ export default {
         }
       }
     },
-
     resetSliders() {
-      this.calculatedAngleCarpe = 0;
       this.angleCarpe = 0;
       this.angleBoulet = 0;
       this.anglePieds = 0;
+
+      this.angleA = 0;
+      this.angleB = 0;
+      this.angleC = 0;
+
+      this.sliderValueA = 0;
+      this.sliderValueB = 0;
+      this.sliderValueC = 0;
 
       this.handlePiedSliderChange();
       this.handleCarpeSliderChange();
@@ -403,7 +461,6 @@ export default {
         });
       }
     },
-
     resetCarpe() {
       this.calculatedAngleCarpe = 0;
       this.angleCarpe = 0;
@@ -412,7 +469,6 @@ export default {
       this.userInteractedCarpe = false;
       this.adjustSvgElements('post-B');
     },
-
     resetBoulet() {
       this.angleBoulet = 0;
       this.handleBouletSliderChange();
@@ -424,7 +480,6 @@ export default {
         this.adjustSvgElements('post-B');
       }
     },
-
     resetPied() {
       this.anglePieds = 0;
       this.handlePiedSliderChange();
@@ -432,7 +487,6 @@ export default {
       this.userInteractedPied = false;
       this.adjustSvgElements('post-D');
     },
-
     adjustSvgElements(elementId) {
       const svgDocument = this.$refs.svgElement.contentDocument;
       if (svgDocument) {
@@ -451,7 +505,6 @@ export default {
         }
       }
     },
-
     getLibelleText(sliderName, value) {
       if ((sliderName === 'carpe' && this.defaultCarpe) ||
           (sliderName === 'boulet' && this.defaultBoulet) ||
@@ -461,13 +514,12 @@ export default {
 
       value = parseFloat(value);
       if (sliderName === 'carpe') {
-        value = this.calculatedAngleCarpe;
-        if (value <= -14.14) return 'Flexion Sévère';
-        if (value <= -9.4267) return 'Flexion Modérée';
-        if (value <= -4.7134) return 'Flexion Discrète';
-        if (value >= 14.1398) return 'Extension Sévère';
-        if (value >= 9.4265) return 'Extension Modérée';
-        if (value >= 4.7132) return 'Extension Discret';
+        if (value <= -14.1) return 'Extension Sévère';
+        if (value <= -9.4) return 'Extension Modérée';
+        if (value <= -4.7) return 'Extension Discrète';
+        if (value >= 14.1) return 'Flexion Sévère';
+        if (value >= 9.4) return 'Flexion Modérée';
+        if (value >= 4.7) return 'Flexion Discret';
       }
       if (sliderName === 'boulet') {
         if (value <= -36) return 'Flexion Sévère';
@@ -487,13 +539,9 @@ export default {
       }
       return 'Normal';
     },
-
     computeSliderClass(sliderName) {
       return (value) => {
         value = parseFloat(value);
-        if (sliderName === 'carpe') {
-          value = this.calculatedAngleCarpe;
-        }
         const thresholds = this.colorThresholds[sliderName];
 
         if (value <= thresholds.darkRedNegative) return 'slider-thumb dark-red';
@@ -505,7 +553,6 @@ export default {
         return 'slider-thumb green';
       };
     },
-
     handleSliderChange(elementId, angle) {
       const sliderName = elementId.includes('post-B') ? 'carpe' :
           elementId.includes('post-C') ? 'boulet' :
@@ -523,47 +570,43 @@ export default {
       const strokeWidth = '2pt';
       this.rotateElement(elementId, angle, strokeColor, strokeWidth);
     },
-
     handleCarpeSliderChange() {
       this.userInteractedCarpe = true;
-      this.angleCarpe = this.calculatedAngleCarpe;
+      this.defaultCarpe = false;
+
+      // Utilisez la valeur calculée pour angleCarpe.
+      this.angleCarpe = this.angleA;
+
+      console.log('angleA:', this.angleA); // Vérifiez la valeur de angleA
+      console.log('angleCarpe:', this.angleCarpe); // Vérifiez la valeur de angleCarpe
+
+      // Calculez angleJarret en fonction de angleCarpe.
       this.angleJarret = 5.8 * (this.angleCarpe / -14.14);
-      if (this.angleJarret > 5.8) {
-        this.angleJarret = 5.8;
-      }
-      if (this.angleJarret < -5.8) {
-        this.angleJarret = -5.8;
-      }
 
-      this.handleSliderChange('post-A', this.angleJarret);
-      this.handleSliderChange('post-B', this.angleCarpe);
+      // Assurez-vous que angleJarret reste dans les bornes [-5.8, 5.8].
+      this.angleJarret = Math.max(Math.min(this.angleJarret, 5.8), -5.8);
+
+      console.log('angleJarret:', this.angleJarret); // Vérifiez la valeur de angleJarret
+
+      // Vérifiez si les valeurs sont des nombres valides avant de les utiliser
+      if (!isNaN(this.angleJarret) && !isNaN(this.angleCarpe)) {
+        // Appliquez les changements aux éléments SVG.
+        this.handleSliderChange('post-A', this.angleJarret);
+        this.handleSliderChange('post-B', this.angleCarpe);
+      } else {
+        console.error('Invalid angleJarret or angleCarpe');
+      }
     },
-
     handleBouletSliderChange() {
-      // this.userInteractedBoulet = true;
-      // this.angleCarpe = 14.14 * (this.angleBoulet / -36);
-      //
-      // if (this.angleCarpe > 14.14) {
-      //   this.angleCarpe = 14.14;
-      // }
-      // if (this.angleCarpe < -14.14) {
-      //   this.angleCarpe = -14.14;
-      // }
-      //
-      // this.handleSliderChange('post-B', this.angleCarpe);
-      // this.handleSliderChange('post-C', this.angleBoulet);
-
       this.userInteractedBoulet = true;
       this.defaultBoulet = false;
-      this.handleSliderChange('post-C', this.angleBoulet);
+      this.handleSliderChange('post-C', this.angleB);
     },
-
     handlePiedSliderChange() {
       this.userInteractedPied = true;
       this.defaultPied = false;
-      this.handleSliderChange('post-D', this.anglePieds);
+      this.handleSliderChange('post-D', this.angleC);
     },
-
     handleSliderClick(sliderName) {
       if (sliderName === 'carpe' && this.defaultCarpe) {
         this.userInteractedCarpe = true;
@@ -579,14 +622,12 @@ export default {
         this.updateSvgElementStyle('post-D', '#5CB85C', '2pt');
       }
     },
-
     determineStrokeColor(sliderName, angle) {
       angle = parseFloat(angle);
       if (sliderName === 'carpe') {
-        angle = this.calculatedAngleCarpe;
-        if (angle <= -14.14 || angle >= 14.1398) return '#d03431';
-        if (angle <= -9.4267 || angle >= 9.4265) return '#d03431';
-        if (angle <= -4.7134 || angle >= 4.7132) return '#ea9c2b';
+        if (angle <= -14.1 || angle >= 14.1) return '#d03431';
+        if (angle <= -9.4 || angle >= 9.4) return '#d03431';
+        if (angle <= -4.7 || angle >= 4.7) return '#ea9c2b';
       } else if (sliderName === 'boulet') {
         if (angle <= -36 || angle >= 36) return '#d03431';
         if (angle <= -24 || angle >= 24) return '#d03431';
@@ -598,7 +639,6 @@ export default {
       }
       return '#5cb85c'; // Vert par défaut
     },
-
     rotateElement(elementId, angle, strokeColor, strokeWidth) {
       const svgDocument = this.$refs.svgElement.contentDocument;
       const element = svgDocument.getElementById(elementId);
@@ -614,6 +654,12 @@ export default {
         if (pivot.id !== "post-A-join") {
           pivot.style.stroke = strokeColor;
           pivot.style.strokeWidth = strokeWidth;
+        }
+
+        if (elementId.includes('post-C')) {
+          this.angleBoulet = parseFloat(angle);
+          this.angleB = this.angleBoulet; // Assurez-vous que this.angleB est mis à jour avec la nouvelle valeur
+          this.adjustMaskFoot(); // Ajustez la position du maskFoot si nécessaire
         }
 
         if (devElement) {
@@ -661,7 +707,6 @@ export default {
         footJoin.setAttribute('transform', `rotate(${inverseAngle}, ${cx}, ${cy})`);
       }
     },
-
     applyRotationToMaskFoot() {
       const svgDocument = this.$refs.svgElement.contentDocument;
       const maskFoot = svgDocument.getElementById('post-mask-foot');
@@ -671,7 +716,6 @@ export default {
         const inverseAngle = -this.totalAngle;
         const cx = pivot.cx.baseVal.value;
         const cy = pivot.cy.baseVal.value;
-
 
 
         maskFoot.setAttribute('transform', `rotate(${inverseAngle}, ${cx}, ${cy})`);

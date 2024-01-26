@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="deviations" xmlns="http://www.w3.org/2000/svg" width="10.674cm" height="14.061cm" viewBox="0 0 302.581 398.591">
+  <g id="post-left">
+    <path id="post-fill-0" d="M206.971,150.861l-86.93-9.78c-4.03-2.74-9.51-2.49-14.15-1.7-3.39.57-6.66,1.68-9.7,3.28-10.61,5.56-26.42,11.08-42.49,15.76,0,0-38.85,10.74-52.7,12.31V21.131c13.6,2.68,50.75-1.54,50.75-1.54,6.31-1.11,12.39-2.68,18.02-4.84,26.57-10.19,78.24-28.25,137.2,7.17,1.13.68,2.22,1.37,3.27,2.05,7.27,4.8,12.78,9.98,16.84,15.44,26.11,35.09-7.75,81.79-20.11,111.45Z" style="fill: #fff; stroke-width: 0px;"/>
+    <g id="post-A">
+      <g id="post-B">
+        <g id="post-C">
+          <g id="post-D">
+            <path id="post-normal" d="M175.246,379.856h30.917s15.784-18.103,17.275-19.51l-.366-3.441-.84-3.139c-2.649-9.904-14.414-14.065-22.701-8.029l-4.038,3.87s-6.619,9.834-20.248,30.251" style="fill: #c4c4c3; stroke: #c1c0c0; stroke-linecap: round; stroke-linejoin: round;"/>
+            <rect id="post-mask-foot" x="144.094" y="367.891" width="102.8" height="30.7" style="fill: #fff; stroke-width: 0px;"/>
+            <line id="post-D-dash" x1="200.267" y1="360.667" x2="187.107" y2="380.486" style="fill: none; stroke: #000; stroke-dasharray: 0 0 0 4; stroke-miterlimit: 10; stroke-width: .5px;"/>
+            <line id="post-D-dev" x1="201.098" y1="359.441" x2="186.716" y2="381.074" style="fill: none; stroke-width: 0px;"/>
+            <circle id="post-E-join" cx="200.808" cy="367.891" r="4.202" style="fill: none; stroke-width: 0px;"/>
+          </g>
+          <path id="post-C-fill" d="M208.719,335.182c-2.494,4.609-5.235,8.1-9.344,10.262-1.628.856-3.882,4.163-3.882,4.163l27.097,11.06s1.975-1.604-.859-7.459c-2.454-5.07,1.223-11.32,1.223-11.32l-14.235-6.706h0Z" style="fill: #fff; stroke-width: 0px;"/>
+          <circle id="post-D-join" cx="205.01" cy="353.578" r="4.202" style="fill: none; stroke: #b7b6b6; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2px;"/>
+          <line id="post-C-dev" x1="215.861" y1="337.182" x2="207.212" y2="350.207" style="fill: none; stroke-width: 0px;"/>
+          <path id="post-C-stroke" d="M222.954,341.888s-3.677,6.25-1.223,11.32c2.834,5.855.859,7.459.859,7.459l-27.097-11.06s2.254-3.307,3.882-4.163c4.109-2.162,6.849-5.653,9.344-10.262" style="fill: none; stroke: #b7b6b6; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2px;"/>
+        </g>
+        <path id="post-B-fill" d="M210.099,261.324c-.861-.033,3.455,2.944,3.966,16.948.509,13.968,3.237,37.128.116,42.236-1.511,2.472-10.145,12.399-2.006,19.046,0,0,4.023,3.229,7.934,2.484,2.83-.539,5.634-1.648,7.88-2.674,4.893-2.235,6.577,1.736,7.258,3.481.026.066.113.039.113-.032-.025-5.515-2.471-14.164-5.018-20.321-2.659-6.425,5.113-65.904,5.113-65.904l-25.356,4.734v.002Z" style="fill: #fff; stroke-width: 0px;"/>
+        <circle id="post-C-join" cx="220.491" cy="330.509" r="4.202" style="fill: none; stroke: #b7b6b6; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2px;"/>
+        <line id="post-C-dash" x1="215.861" y1="337.182" x2="207.212" y2="350.207" style="fill: none; stroke: #000; stroke-dasharray: 0 0 0 4; stroke-miterlimit: 10; stroke-width: .5px;"/>
+        <line id="post-B-dev" x1="220.292" y1="260.34" x2="220.292" y2="320.049" style="fill: none; stroke: #a7a7a6; stroke-miterlimit: 10; stroke-width: .5px;"/>
+        <g id="post-B-stroke">
+          <path d="M220.108,342.039c2.869.266,5.634-1.648,7.88-2.674,4.893-2.235,6.577,1.736,7.258,3.481.026.066.113.039.113-.032-.025-5.515-2.471-14.164-5.018-20.321-2.659-6.425,5.113-65.904,5.113-65.904" style="fill: none; stroke: #b7b6b6; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2px;"/>
+          <path d="M210.099,261.324c-.861-.033,3.455,2.944,3.966,16.948.509,13.968,3.237,37.128.116,42.236-1.511,2.472-10.145,12.399-2.006,19.046" style="fill: none; stroke: #b7b6b6; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2px;"/>
+        </g>
+      </g>
+      <path id="post-A-fill" d="M233.031,261.324c2.574-2.333,3.122-8.573,3.103-8.906-.124-2.217,7.617-20.391.835-29.487-7.472-10.02-15.961-21.906-21.315-35.069-12.392-30.466-8.613-44.852-8.613-44.852l-95.135-13.195s8.425,6.48,10.369,19.117c1.802,11.716,72.841,73.997,74.094,89.033,0,0-1.096,7.048,3.759,11.121,4.855,4.072,6.951,13.134,12.07,12.294l20.834-.055h0Z" style="fill: #fff; stroke-width: 0px;"/>
+      <circle id="post-B-join" cx="220.491" cy="250.216" r="4.202" style="fill: none; stroke: #b7b6b6; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2px;"/>
+      <line id="post-B-dash" x1="220.292" y1="260.34" x2="220.292" y2="320.049" style="fill: none; stroke: #000; stroke-dasharray: 0 0 0 4; stroke-miterlimit: 10; stroke-width: .5px;"/>
+      <line id="post-B-dev-top" x1="151.798" y1="155.049" x2="213.811" y2="241.211" style="fill: none; stroke-width: 0px;"/>
+      <g id="post-A-stroke">
+        <path d="M111.904,129.815s8.425,6.48,10.369,19.117c1.802,11.716,72.841,73.997,74.094,89.033,0,0-1.096,7.048,3.759,11.121,4.855,4.072,6.951,13.134,12.07,12.294" style="fill: none; stroke: #b7b6b6; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2px;"/>
+        <path d="M233.031,261.324c2.574-2.333,3.122-8.573,3.103-8.906-.124-2.217,7.617-20.391.835-29.487-7.472-10.02-15.961-21.906-21.315-35.069-12.392-30.466-8.613-44.852-8.613-44.852" style="fill: none; stroke: #b7b6b6; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2px;"/>
+      </g>
+    </g>
+    <circle id="post-A-join" cx="151.798" cy="155.049" r="4.202" style="fill: none; stroke-width: 0px;"/>
+    <path id="post-fill-queue" d="M301.581,222.931c.02.43-.49.69-.81.4l-1.92-1.67c-.63-.55-1.61-.23-1.8.59l-.88,5.53c-.14.91-1.41,1.03-1.72.15l-3.13-8.84c-.28-.78-1.41-.68-1.56.13l-1.05,5.83c-.14.77-1.16.94-1.54.26l-1.82-3.23c-.57-1-2-1.02-2.6-.04l-1.08,1.79c-.65,1.06-2.16,1.15-2.93.18l-1.09-1.38c-.74-.94-1.14-2.11-1.12-3.32.33-16.22,1.34-134.67-38.28-174.82,0,0-.5.49-.79,1.44-.29.97-1.54,1.22-2.2.46-2.44-2.77-6.19-6.68-8.18-6.98-4.06-5.46-9.57-10.64-16.84-15.44,0,0,20.86-5.65,39.55,14.24,0,0-10.54-4.56-8.63-1.44,1.92,3.11,50.67,2.73,60.42,186.16h0Z" style="fill: #fff; stroke-width: 0px;"/>
+    <path id="post-stroke-queue" d="M210.238,23.975s20.862-5.656,39.554,14.233c0,0-10.544-4.553-8.627-1.438s50.665,2.727,60.416,186.161c.023.432-.485.686-.811.401l-1.914-1.671c-.629-.549-1.616-.226-1.799.588l-.88,5.526c-.146.915-1.415,1.031-1.725.158l-3.135-8.839c-.277-.781-1.409-.688-1.556.127l-1.049,5.826c-.138.768-1.161.941-1.545.262l-1.82-3.226c-.564-.999-1.995-1.022-2.591-.042l-1.084,1.784c-.647,1.064-2.156,1.157-2.928.181l-1.087-1.373c-.749-.946-1.145-2.115-1.121-3.321.33-16.223,1.335-134.674-38.287-174.82,0,0-.501.491-.785,1.441-.289.964-1.54,1.216-2.205.46-2.439-2.776-6.185-6.687-8.173-6.983" style="fill: none; stroke: #b7b6b6; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2px;"/>
+    <g id="post-stroke-0">
+      <path d="M120.038,141.084c-4.025-2.745-9.508-2.495-14.146-1.708-3.386.575-6.657,1.687-9.698,3.282-10.608,5.562-26.42,11.084-42.493,15.762,0,0-38.846,10.736-52.7,12.311" style="fill: none; stroke: #b7b6b6; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2px;"/>
+      <path d="M206.97,150.858c14.557-34.937,58.956-93.529,0-128.942C148.014-13.496,96.336,4.559,69.77,14.749c-5.627,2.158-11.71,3.729-18.016,4.839,0,0-37.156,4.222-50.754,1.54" style="fill: none; stroke: #b7b6b6; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2px;"/>
+    </g>
+    <polyline id="post-thin" points="151.798 155.049 220.292 250.216 220.292 330.509 186.716 381.074" style="fill: none; stroke: #a7a7a6; stroke-miterlimit: 10; stroke-width: .5px;"/>
+  </g>
+</svg>
