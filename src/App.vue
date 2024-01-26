@@ -125,7 +125,7 @@
 object{
   overflow: hidden;
   vertical-align: middle;
-  width: 400px;
+  width: 350px;
 }
 
 hr{
@@ -254,7 +254,6 @@ export default {
         A_DEGS: [-14.1, -9.4, -4.7, 0, 4.7, 9.4, 14.1],
         B_DEGS: [-36, -24, -12, 0, 12, 24, 36],
         C_DEGS: [-12, -8, -4, 0, 4, 8, 12],
-        B_COMP: [0, 0, 0, 0, 0, 0, 0],
       },
       sliderValueA: 0,
       sliderValueB: 0,
@@ -294,6 +293,11 @@ export default {
       userInteractedCarpe: false,
       userInteractedBoulet: false,
       userInteractedPied: false,
+      maskFootMoved: false,
+      maskFootMovedForFirstCondition: false,
+      maskFootMovedForSecondCondition: false,
+      maskFootMovedForThirdCondition: false,
+      maskFootMovedForFourCondition: false,
     };
   },
   computed: {
@@ -315,6 +319,54 @@ export default {
     // ...
   },
   methods: {
+    adjustMaskFoot() {
+      const svgDocument = this.$refs.svgElement.contentDocument;
+      const maskFoot = svgDocument.getElementById('ant-mask-foot');
+
+      if (maskFoot) {
+        const currentY = parseFloat(maskFoot.getAttribute('y') || 0);
+
+        if (this.angleB >= 24 && !this.maskFootMovedForFirstCondition) {
+          maskFoot.setAttribute('y', currentY + 5);
+          this.maskFootMovedForFirstCondition = true;
+        } else if (this.angleB < 24 && this.maskFootMovedForFirstCondition) {
+          maskFoot.setAttribute('y', currentY - 5);
+          this.maskFootMovedForFirstCondition = false;
+        }
+
+        if (this.angleB === -24 && !this.maskFootMovedForThirdCondition) {
+          maskFoot.setAttribute('y', currentY + 1);
+          this.maskFootMovedForThirdCondition = true;
+        } else if (this.angleB !== -24 && this.maskFootMovedForThirdCondition) {
+          maskFoot.setAttribute('y', currentY - 1);
+          this.maskFootMovedForThirdCondition = false;
+        }
+
+        if (this.angleB === -36 && !this.maskFootMovedForFourCondition) {
+          maskFoot.setAttribute('y', currentY + 2);
+          this.maskFootMovedForFourCondition = true;
+        } else if (this.angleB !== -36 && this.maskFootMovedForFourCondition) {
+          maskFoot.setAttribute('y', currentY - 2);
+          this.maskFootMovedForFourCondition = false;
+        }
+      }
+    },
+    adjustDoubleMaskFoot() {
+      const svgDocument = this.$refs.svgElement.contentDocument;
+      const maskFoot = svgDocument.getElementById('ant-mask-foot');
+
+      if (maskFoot) {
+        const currentY = parseFloat(maskFoot.getAttribute('y') || 0);
+
+        if (this.angleA === -14.1 && this.angleB === -36 && !this.maskFootMovedForSecondCondition) {
+          maskFoot.setAttribute('y', currentY + 5);
+          this.maskFootMovedForSecondCondition = true;
+        } else if (this.angleA !== -14.1 && this.maskFootMovedForSecondCondition || this.angleB !== -36 && this.maskFootMovedForSecondCondition) {
+          maskFoot.setAttribute('y', currentY - 5);
+          this.maskFootMovedForSecondCondition = false;
+        }
+      }
+    },
     mapSliderValueToIndex(sliderValue) {
       console.log('Received sliderValue:', sliderValue); // Log pour vérifier la valeur reçue
       const index = +sliderValue + 3; // Force la conversion en nombre
@@ -406,6 +458,14 @@ export default {
       this.angleBoulet = 0;
       this.anglePieds = 0;
 
+      this.angleA = 0;
+      this.angleB = 0;
+      this.angleC = 0;
+
+      this.sliderValueA = 0;
+      this.sliderValueB = 0;
+      this.sliderValueC = 0;
+
       this.handlePiedSliderChange();
       this.handleCarpeSliderChange();
       this.handleBouletSliderChange();
@@ -490,13 +550,12 @@ export default {
 
       value = parseFloat(value);
       if (sliderName === 'carpe') {
-        value = this.calculatedAngleCarpe;
-        if (value <= -14.1) return 'Flexion Sévère';
-        if (value <= -9.4) return 'Flexion Modérée';
-        if (value <= -4.7) return 'Flexion Discrète';
-        if (value >= 14.1) return 'Extension Sévère';
-        if (value >= 9.4) return 'Extension Modérée';
-        if (value >= 4.7) return 'Extension Discret';
+        if (value <= -14.1) return 'Extension Sévère';
+        if (value <= -9.4) return 'Extension Modérée';
+        if (value <= -4.7) return 'Extension Discrète';
+        if (value >= 14.1) return 'Flexion Sévère';
+        if (value >= 9.4) return 'Flexion Modérée';
+        if (value >= 4.7) return 'Flexion Discret';
       }
       if (sliderName === 'boulet') {
         if (value <= -36) return 'Flexion Sévère';
@@ -631,6 +690,19 @@ export default {
         if (pivot.id !== "ant-A-join") {
           pivot.style.stroke = strokeColor;
           pivot.style.strokeWidth = strokeWidth;
+        }
+
+        if (elementId.includes('ant-C')) {
+          this.angleBoulet = parseFloat(angle);
+          this.angleB = this.angleBoulet; // Assurez-vous que this.angleB est mis à jour avec la nouvelle valeur
+          this.adjustMaskFoot(); // Ajustez la position du maskFoot si nécessaire
+          this.adjustDoubleMaskFoot();
+        }
+
+        if (elementId.includes('ant-B')) {
+          this.angleCarpe = parseFloat(angle);
+          this.angleA = this.angleC;
+          this.adjustDoubleMaskFoot();
         }
 
         if (devElement) {

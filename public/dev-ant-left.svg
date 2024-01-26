@@ -6,7 +6,7 @@
       <g id="ant-B">
         <g id="ant-C">
           <g id="ant-D">
-            <path id="ant-normal" d="M189.5,476.5l-23.6,34.7h39.6l9-22.3-1-3.1-.648-4.559c-1.073-7.545-8.89-12.128-15.998-9.379l-4.754,1.838-2.6,2.8Z" style="fill: #c6c5c4; stroke: #c3c1c1;"/>
+            <path id="ant-normal" d="M189.5,476.5l-20.357,34.7h31.63s13.087-21.897,13.592-22.954l-.865-2.446-.648-4.559c-1.073-7.545-8.89-12.128-15.998-9.379l-4.754,1.838-2.6,2.8Z" style="fill: #c6c5c4; stroke: #c3c1c1;"/>
             <rect id="ant-mask-foot" x="145.6" y="496.4" width="102.8" height="30.7" style="fill: #fff; stroke-width: 0px;"/>
             <line id="ant-D-dash" x1="196.7" y1="488.1" x2="183.9" y2="509" style="fill: none; stroke: #010101; stroke-dasharray: 0 0 0 0 0 0 0 4; stroke-miterlimit: 10; stroke-width: .5px;"/>
             <line id="ant-D-dev" x1="182.9" y1="510.7" x2="196.7" y2="488.1" style="fill: none; stroke-width: 0px;"/>
@@ -14,16 +14,16 @@
           </g>
           <path id="ant-C-fill" d="M203.1,460.7s-.9,6.7-7.3,10.6c-6.4,3.9-6.2,5.2-6.2,5.2l25,12.4s-6-10,6.6-23.7l-18.1-4.5h0Z" style="fill: #fff; stroke-width: 0px;"/>
           <line id="ant-C-dev" x1="209.3" y1="467.4" x2="202.2" y2="479.1" style="fill: none; stroke-width: 0px;"/>
-          <path id="ant-C-stroke" d="M203.1,460.7s-.9,6.7-7.3,10.6c-6.4,3.9-6.2,5.2-6.2,5.2l25,12.4s-6-10,6.6-23.7" style="fill: none; stroke: #b8b7b7; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2px;"/>
+          <path id="ant-C-stroke" d="M203.1,460.7s-.9,6.7-7.3,10.6c-6.4,3.9-6.2,5.2-6.2,5.2l23.77,11.79c.4.199.837-.189.681-.608-1.134-3.059-3.347-11.726,6.658-22.604" style="fill: none; stroke: #b8b7b7; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2px;"/>
           <circle id="ant-D-join" cx="199.4" cy="481.6" r="4.2" style="fill: none; stroke: #b8b7b7; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2px;"/>
         </g>
-        <path id="ant-B-fill" d="M201.1,398s5.6,46.8,3.7,49.9c-.8,1.4-2.9,13.7-.7,16.3,0,0,4.4-1.9,5.7-.9.9.7,1.9,1.3,3.5,1.6,2.4.4,2.8,1.3,4.1,1.4,5.9.5,9.2-12.5,6.7-15.3-2.5-2.9-2.2-51-2.2-51l-20.8-2h0Z" style="fill: #fff; stroke-width: 0px;"/>
+        <path id="ant-B-fill" d="M201.1,398s5.6,46.8,3.7,49.9c-.8,1.4-2.9,13.7-.7,16.3,0,0,4.4-1.9,5.7-.9.9.7,1.9,1.3,3.5,1.6,2.4.4,2.8,1.3,4.1,1.4,9.989-5.232,10.27,6.143,10.292,2.699.022-3.399-3.105-15.717-3.592-17.999-2.5-2.9-2.2-51-2.2-51l-20.8-2h0Z" style="fill: #fff; stroke-width: 0px;"/>
         <circle id="ant-C-join" cx="213" cy="457.7" r="4.2" style="fill: none; stroke: #b8b7b7; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2px;"/>
         <line id="ant-C-dash" x1="209.7" y1="466.7" x2="203.9" y2="476.3" style="fill: none; stroke: #010101; stroke-dasharray: 0 0 0 0 0 0 0 4; stroke-miterlimit: 10; stroke-width: .5px;"/>
         <line id="ant-B-dev" x1="213" y1="399.9" x2="213" y2="451" style="fill: none; stroke: #a9a9aa; stroke-miterlimit: 10; stroke-width: .5px;"/>
         <g id="ant-B-stroke">
           <path d="M201.1,398s5.6,46.8,3.7,49.9c-.8,1.4-4.2,14,1.2,17.7" style="fill: none; stroke: #b8b7b7; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2px;"/>
-          <path d="M221.9,399.9s-.3,48.2,2.2,51c2.5,2.9-.8,15.3-6.7,15.3" style="fill: none; stroke: #b8b7b7; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2px;"/>
+          <path d="M221.9,399.9s-.011,43.764,1.903,50.313c.152.521,6.109,23.566,3.027,18.324-4.314-7.336-7.11-1.515-11.693-1.358" style="fill: none; stroke: #b8b7b7; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2px;"/>
         </g>
       </g>
       <path id="ant-A-fill" d="M176.6,274.9s-1.3,12.9,4.8,16.4,7.5,30.2,7.1,35.6,7.8,27.9,6.7,35.1-.3,36.3,10.9,40.3c0,0,3-9.1,4.8-8.8,1.6.2,2.4.3,3.6.3,1.1.1,3.1,8.7,4.2,8.5,0,0,4.2.1,7.1-12.4s-3.5-37.7-1.1-41.4c2.1-3.2,4.3-29,4.9-36.5.1-1.3.7-2.4,1.6-3.3,3.1-3,7.5-14.2,6.7-16.4-2.7-8,4.4-17.4,4.4-17.4h-65.7Z" style="fill: #fff; stroke-width: 0px;"/>
