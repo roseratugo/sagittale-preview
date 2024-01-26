@@ -239,6 +239,7 @@ input[type=range]:hover {
   opacity: 1;
 }
 
+
 </style>
 
 <script>
