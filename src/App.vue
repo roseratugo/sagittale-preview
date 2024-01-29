@@ -15,12 +15,12 @@
           <div class="col-4">
             <div>
               <div style="color: #6c757d !important; text-align: center !important; margin-bottom: 20px;">
-                <div class="badge" style="background-color: #a8a8a8 !important; color: #eeeeee; padding-right: 0.6em; padding-left: 0.6em; border-radius: 10rem;">PG</div><br>
-                <span style="font-size: 80%; font-weight: 400; white-space: nowrap !important;">Postérieur gauche</span>
+                <div class="badge" style="background-color: #a8a8a8 !important; color: #eeeeee; padding-right: 0.6em; padding-left: 0.6em; border-radius: 10rem;">AG</div><br>
+                <span style="font-size: 80%; font-weight: 400; white-space: nowrap !important;">Antérieur gauche</span>
               </div>
             </div>
             <div class="dev-select-panel">
-              <strong>Tarse</strong>
+              <strong>Carpe</strong>
               <div class="dev-information">
                 <input type="range" min="-3" max="3" step="1" :style="{ background: defaultCarpe ? '#808080' : '' }" v-model="sliderValueA" @input="handleCarpeSliderChange" @click="handleSliderClick('carpe')" :class="computeSliderClass('carpe')(angleA)"><br>
                 <div class="btn btn-link" @click="resetCarpe"><font-awesome-icon icon="eraser" /></div>
@@ -239,7 +239,6 @@ input[type=range]:hover {
   opacity: 1;
 }
 
-
 </style>
 
 <script>
@@ -295,6 +294,10 @@ export default {
       userInteractedBoulet: false,
       userInteractedPied: false,
       maskFootMoved: false,
+      maskFootMovedForFirstCondition: false,
+      maskFootMovedForSecondCondition: false,
+      maskFootMovedForThirdCondition: false,
+      maskFootMovedForFourCondition: false,
     };
   },
   computed: {
@@ -323,12 +326,19 @@ export default {
       if (maskFoot) {
         const currentY = parseFloat(maskFoot.getAttribute('y') || 0);
 
-        if (this.angleB >= 24 && !this.maskFootMoved) {
-          maskFoot.setAttribute('y', currentY + 8);
-          this.maskFootMoved = true;
-        } else if (this.angleB < 24 && this.maskFootMoved) {
-          maskFoot.setAttribute('y', currentY - 8);
-          this.maskFootMoved = false;
+        if ((this.totalAngleWithoutFoot <= -27) && !this.maskFootMovedForFirstCondition) {
+          maskFoot.setAttribute('y', currentY + 4);
+          this.maskFootMovedForFirstCondition = true;
+        } else if (!((this.totalAngleWithoutFoot < -27)) && this.maskFootMovedForFirstCondition) {
+          maskFoot.setAttribute('y', currentY - 4);
+          this.maskFootMovedForFirstCondition = false;
+        }
+        if ((this.totalAngleWithoutFoot >= 27) && !this.maskFootMovedForSecondCondition) {
+          maskFoot.setAttribute('y', currentY + 9);
+          this.maskFootMovedForSecondCondition = true;
+        } else if (!((this.totalAngleWithoutFoot >= 27)) && this.maskFootMovedForSecondCondition) {
+          maskFoot.setAttribute('y', currentY - 9);
+          this.maskFootMovedForSecondCondition = false;
         }
       }
     },
@@ -515,12 +525,12 @@ export default {
 
       value = parseFloat(value);
       if (sliderName === 'carpe') {
-        if (value <= -14.1) return 'Extension Sévère';
-        if (value <= -9.4) return 'Extension Modérée';
-        if (value <= -4.7) return 'Extension Discrète';
-        if (value >= 14.1) return 'Flexion Sévère';
-        if (value >= 9.4) return 'Flexion Modérée';
-        if (value >= 4.7) return 'Flexion Discret';
+        if (value <= -14.1) return 'Flexion Sévère';
+        if (value <= -9.4) return 'Flexion Modérée';
+        if (value <= -4.7) return 'Flexion Discrète';
+        if (value >= 14.1) return 'Extension Sévère';
+        if (value >= 9.4) return 'Extension Modérée';
+        if (value >= 4.7) return 'Extension Discret';
       }
       if (sliderName === 'boulet') {
         if (value <= -36) return 'Flexion Sévère';
@@ -660,7 +670,6 @@ export default {
         if (elementId.includes('post-C')) {
           this.angleBoulet = parseFloat(angle);
           this.angleB = this.angleBoulet; // Assurez-vous que this.angleB est mis à jour avec la nouvelle valeur
-          this.adjustMaskFoot(); // Ajustez la position du maskFoot si nécessaire
         }
 
         if (devElement) {
@@ -683,8 +692,9 @@ export default {
         }
 
         this.totalAngleWithoutFoot = this.angleJarret + this.angleCarpe + this.angleBoulet;
+        console.log(this.totalAngleWithoutFoot)
         this.totalAngle = this.angleJarret + this.angleCarpe + this.angleBoulet + this.anglePieds;
-
+        this.adjustMaskFoot(); // Ajustez la position du maskFoot si nécessaire
         this.applyRotationToMaskFoot();
         this.applyRotationToFoot();
       } else {
