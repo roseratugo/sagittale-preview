@@ -254,6 +254,7 @@ export default {
         A_DEGS: [-14.1, -9.4, -4.7, 0, 4.7, 9.4, 14.1],
         B_DEGS: [-36, -24, -12, 0, 12, 24, 36],
         C_DEGS: [-16, -8, -4, 0, 4, 8, 12],
+        B_COMP: [5.78, 3.86, 1.93, 0, -1.93, -3.86, -5.78],
       },
       sliderValueA: 0,
       sliderValueB: 0,
@@ -306,6 +307,11 @@ export default {
       const value = this.SIDE_DEVIATION.A_DEGS[index];
       return value;
     },
+    angleBComp() {
+      const index = this.mapSliderValueToIndex(this.sliderValueA);
+      const value = this.SIDE_DEVIATION.B_COMP[index];
+      return value;
+    },
     angleB() {
       const index = this.mapSliderValueToIndex(this.sliderValueB);
       const value = this.SIDE_DEVIATION.B_DEGS[index];
@@ -336,9 +342,7 @@ export default {
       }
     },
     mapSliderValueToIndex(sliderValue) {
-      console.log('Received sliderValue:', sliderValue); // Log pour vérifier la valeur reçue
-      const index = +sliderValue + 3; // Force la conversion en nombre
-      console.log('Computed index:', index); // Log pour vérifier l'index calculé
+      const index = +sliderValue + 3;
 
       if (index >= 0 && index < this.SIDE_DEVIATION.B_DEGS.length) {
         return index;
@@ -427,6 +431,7 @@ export default {
       this.anglePieds = 0;
 
       this.angleA = 0;
+      this.angleBComp = 0;
       this.angleB = 0;
       this.angleC = 0;
 
@@ -580,17 +585,7 @@ export default {
 
       // Utilisez la valeur calculée pour angleCarpe.
       this.angleCarpe = this.angleA;
-
-      console.log('angleA:', this.angleA); // Vérifiez la valeur de angleA
-      console.log('angleCarpe:', this.angleCarpe); // Vérifiez la valeur de angleCarpe
-
-      // Calculez angleJarret en fonction de angleCarpe.
-      this.angleJarret = 5.8 * (this.angleCarpe / -14.14);
-
-      // Assurez-vous que angleJarret reste dans les bornes [-5.8, 5.8].
-      this.angleJarret = Math.max(Math.min(this.angleJarret, 5.8), -5.8);
-
-      console.log('angleJarret:', this.angleJarret); // Vérifiez la valeur de angleJarret
+      this.angleJarret = this.angleBComp;
 
       // Vérifiez si les valeurs sont des nombres valides avant de les utiliser
       if (!isNaN(this.angleJarret) && !isNaN(this.angleCarpe)) {
@@ -685,7 +680,6 @@ export default {
         }
 
         this.totalAngleWithoutFoot = this.angleJarret + this.angleCarpe + this.angleBoulet;
-        console.log(this.totalAngleWithoutFoot)
         this.totalAngle = this.angleJarret + this.angleCarpe + this.angleBoulet + this.anglePieds;
         this.adjustMaskFoot(); // Ajustez la position du maskFoot si nécessaire
         this.applyRotationToMaskFoot();
