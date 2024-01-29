@@ -15,12 +15,12 @@
           <div class="col-4">
             <div>
               <div style="color: #6c757d !important; text-align: center !important; margin-bottom: 20px;">
-                <div class="badge" style="background-color: #a8a8a8 !important; color: #eeeeee; padding-right: 0.6em; padding-left: 0.6em; border-radius: 10rem;">AG</div><br>
-                <span style="font-size: 80%; font-weight: 400; white-space: nowrap !important;">Antérieur gauche</span>
+                <div class="badge" style="background-color: #a8a8a8 !important; color: #eeeeee; padding-right: 0.6em; padding-left: 0.6em; border-radius: 10rem;">PG</div><br>
+                <span style="font-size: 80%; font-weight: 400; white-space: nowrap !important;">Postérieur gauche</span>
               </div>
             </div>
             <div class="dev-select-panel">
-              <strong>Carpe</strong>
+              <strong>Tarse</strong>
               <div class="dev-information">
                 <input type="range" min="-3" max="3" step="1" :style="{ background: defaultCarpe ? '#808080' : '' }" v-model="sliderValueA" @input="handleCarpeSliderChange" @click="handleSliderClick('carpe')" :class="computeSliderClass('carpe')(angleA)"><br>
                 <div class="btn btn-link" @click="resetCarpe"><font-awesome-icon icon="eraser" /></div>
